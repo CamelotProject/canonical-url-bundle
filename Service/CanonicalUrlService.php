@@ -21,6 +21,7 @@ class CanonicalUrlService
      * CanonicalUrlService constructor.
      * @param RouterInterface $router
      * @param string          $siteUrl
+     * @param int             $redirectCode
      */
     public function __construct(RouterInterface $router, $siteUrl = null, $redirectCode = null)
     {
