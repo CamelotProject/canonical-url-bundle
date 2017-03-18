@@ -5,7 +5,7 @@
   "description": "Canonical URL Symfony bundle",
   "autoload": {
     "psr-4": {
-      "Palmtree\\CanonicalUrlBundle": ""
+      "Palmtree\\CanonicalUrlBundle\\": ""
     }
   },
   "require": {
