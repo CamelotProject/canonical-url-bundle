@@ -1,14 +1,24 @@
 {
-  "name": "palmtree/canonical-url-bundle",
-  "license": "MIT",
-  "type": "symfony-bundle",
-  "description": "Canonical URL Symfony bundle",
-  "autoload": {
-    "psr-4": {
-      "Palmtree\\CanonicalUrlBundle\\": ""
+    "name": "palmtree/canonical-url-bundle",
+    "type": "symfony-bundle",
+    "description": "Canonical URL Symfony bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andy Palmer",
+            "email": "andy@andypalmer.me"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "symfony/dependency-injection": "~2.7|~3.0",
+        "symfony/config": "~2.7|~3.0",
+        "symfony/routing": "~2.7|~3.0",
+        "symfony/http-kernel": "~2.7|~3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Palmtree\\CanonicalUrlBundle\\": ""
+        }
     }
-  },
-  "require": {
-    "php": ">=5.5"
-  }
 }
