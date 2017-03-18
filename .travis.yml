@@ -7,13 +7,13 @@ matrix:
     - php: hhvm
   include:
     - php: 7.1
-        env: PHPSNIFF=1 PHPLINT=1
+      env: PHPSNIFF=1 PHPLINT=1
     - php: 7.0
-        env: PHPLINT=1
+      env: PHPLINT=1
     - php: 5.6
-        env: PHPLINT=1
+      env: PHPLINT=1
     - php: 5.4
-        env: PHPLINT=1
+      env: PHPLINT=1
     - php: hhvm
 
 
