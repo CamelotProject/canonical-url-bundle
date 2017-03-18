@@ -19,7 +19,7 @@ https://www.example.org/about-us/
 When a user requests the resource with any of the above URLs, `CanonicalUrlBundle` will build a canonical URL based on a predefined site URL and will
 perform an HTTP redirect to it.
 
-The bundle can also add a `<link rel="canonical">` tag to your twig templates, see the [Usage](#Usage) section for how.
+The bundle can also add a `<link rel="canonical">` tag to your twig templates, see the [Usage](#usage) section for how.
 
 ## Installation
 
