@@ -58,6 +58,12 @@ To add a `<link rel="canonical">` tag to your pages include the following code i
 {% include '@PalmtreeCanonicalUrl/canonical_link_tag.html.twig' %}
 ```
 
+The href attribute will default to the canonical URL for the current request, but this can be overidden:
+
+```twig
+{% include '@PalmtreeCanonicalUrl/canonical_link_tag.html.twig' with { href: 'http://example.org' } %}
+```
+
 ## License
 
 This bundle is released under the [MIT license](LICENSE)
