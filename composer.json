@@ -1,0 +1,14 @@
+{
+  "name": "palmtree/canonical-url-bundle",
+  "license": "MIT",
+  "type": "symfony-bundle",
+  "description": "Canonical URL Symfony bundle",
+  "autoload": {
+    "psr-4": {
+      "Palmtree\\CanonicalUrlBundle": ""
+    }
+  },
+  "require": {
+    "php": ">=5.5"
+  }
+}

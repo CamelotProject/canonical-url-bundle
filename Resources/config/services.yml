@@ -1,0 +1,7 @@
+services:
+    palmtree.canonical_url:
+        class: Palmtree\CanonicalUrlBundle\Service\CanonicalUrlService
+        arguments: ['@router']
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
