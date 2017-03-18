@@ -13,21 +13,30 @@ class CanonicalUrlService
 {
     const CONTROLLER_PATTERN = '~^/app(?:_.+)*\.php~';
 
+    /** @var RouterInterface */
     protected $router;
+    /** @var string */
     protected $siteUrl;
+    /** @var int */
     protected $redirectCode;
+    /** @var bool */
+    protected $redirect;
+    /** @var bool */
+    protected $trailingSlash;
 
     /**
      * CanonicalUrlService constructor.
      * @param RouterInterface $router
-     * @param string          $siteUrl
-     * @param int             $redirectCode
+     * @param array           $config
      */
-    public function __construct(RouterInterface $router, $siteUrl = null, $redirectCode = null)
+    public function __construct(RouterInterface $router, array $config = [])
     {
-        $this->router       = $router;
-        $this->siteUrl      = $siteUrl;
-        $this->redirectCode = $redirectCode;
+        $this->router = $router;
+
+        $this->siteUrl       = $config['site_url'];
+        $this->redirectCode  = $config['redirect_code'];
+        $this->redirect      = $config['redirect'];
+        $this->trailingSlash = $config['trailing_slash'];
     }
 
     /**
@@ -41,15 +50,17 @@ class CanonicalUrlService
 
         $route = $request->get('_route');
 
-        if (! $route || $route[0] === '_') {
+        if (! $route) {
             return;
         }
 
         $requestUrl   = $request->getSchemeAndHttpHost() . $request->getRequestUri();
         $canonicalUrl = $this->generateUrl($route, $request->getQueryString());
 
-        if (strcasecmp($requestUrl, $canonicalUrl) !== 0) {
-            $event->setResponse(new RedirectResponse($canonicalUrl, $this->redirectCode));
+        if ($canonicalUrl && strcasecmp($requestUrl, $canonicalUrl) !== 0) {
+            if ($this->redirect) {
+                $event->setResponse(new RedirectResponse($canonicalUrl, $this->redirectCode));
+            }
         }
     }
 
@@ -69,12 +80,15 @@ class CanonicalUrlService
             $uri = $request->getRequestUri();
 
             // See if there's a matching route without a trailing slash
-            $match = $this->getUnslashedRoute($uri);
+            $match = $this->getAlternativeRoute($uri);
 
             if ($match) {
-                $event->setResponse(new RedirectResponse($this->router->generate($match), $this->redirectCode));
+                if ($this->redirect) {
+                    $url = $this->router->generate($match);
+                    $event->setResponse(new RedirectResponse($url, $this->redirectCode));
 
-                return;
+                    return;
+                }
             }
         }
     }
@@ -84,18 +98,22 @@ class CanonicalUrlService
      *
      * @return string|null
      */
-    protected function getUnslashedRoute($uri)
+    protected function getAlternativeRoute($uri)
     {
-        $unslashedUri = rtrim($uri, '/');
+        $alternativeUri = rtrim($uri, '/');
 
-        if ($unslashedUri === $uri) {
+        if ($this->trailingSlash) {
+            $alternativeUri .= '/';
+        }
+
+        if ($alternativeUri === $uri) {
             return null;
         }
 
-        $unslashedUri = preg_replace(static::CONTROLLER_PATTERN, '', $unslashedUri);
+        $alternativeUri = preg_replace(static::CONTROLLER_PATTERN, '', $alternativeUri);
 
         try {
-            $match = $this->router->match($unslashedUri);
+            $match = $this->router->match($alternativeUri);
 
             return $match['_route'];
         } catch (ResourceNotFoundException $e) {
@@ -125,7 +143,12 @@ class CanonicalUrlService
             $parameters = [];
         }
 
-        $uri = $this->router->generate($route, $parameters);
+        try {
+            $uri = $this->router->generate($route, $parameters);
+        } catch (\Exception $exception) {
+            return '';
+        }
+
         $url = rtrim($this->siteUrl, '/') . '/' . ltrim($uri, '/');
 
         return $url;

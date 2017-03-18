@@ -17,8 +17,7 @@ class PalmtreeCanonicalUrlExtension extends Extension
         $configuration = new Configuration();
         $config        = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('palmtree.canonical_url.site_url', $config['site_url']);
-        $container->setParameter('palmtree.canonical_url.redirect_code', $config['redirect_code']);
+        $container->setParameter('palmtree.canonical_url.config', $config);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
