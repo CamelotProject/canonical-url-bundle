@@ -5,6 +5,7 @@ The `CanonicalUrlBundle` is a Symfony bundle to redirect requests from multiple 
 
 For example, if you had a resource named /about-us for your site example.org it could potentially be accessed with:
 
+```
 http://example.org/about-us
 http://example.org/about-us/
 http://www.example.org/about-us
@@ -13,6 +14,7 @@ https://example.org/about-us
 https://example.org/about-us/
 https://www.example.org/about-us
 https://www.example.org/about-us/
+```
 
 When a user requests the resource with any of the above URLs, `CanonicalUrlBundle` will build a canonical URL based on a predefined site URL and will
 perform an HTTP redirect to it.
