@@ -21,9 +21,9 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('site_url')
                     ->isRequired()->cannotBeEmpty()
                     ->validate()
-                    ->ifTrue(function ($value) {
-                        return !is_string($value);
-                    })
+                        ->ifTrue(function ($value) {
+                            return !is_string($value);
+                        })
                         ->thenInvalid('site_url must be a string')
                     ->end()
                 ->end()
