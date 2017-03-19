@@ -14,7 +14,6 @@ class CompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $definition = $container->getDefinition('palmtree.canonical_url');
-        $definition->addArgument($container->getParameter('palmtree.canonical_url.site_url'));
-        $definition->addArgument($container->getParameter('palmtree.canonical_url.redirect_code'));
+        $definition->addArgument($container->getParameter('palmtree.canonical_url.config'));
     }
 }

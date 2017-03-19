@@ -10,15 +10,24 @@
         }
     ],
     "require": {
-        "php": ">=5.5",
+        "php": ">=5.4",
         "symfony/dependency-injection": "~2.7|~3.0",
         "symfony/config": "~2.7|~3.0",
         "symfony/routing": "~2.7|~3.0",
-        "symfony/http-kernel": "~2.7|~3.0"
+        "symfony/http-kernel": "~2.7|~3.0",
+        "twig/twig": "~1.28|~2.0"
     },
     "autoload": {
         "psr-4": {
             "Palmtree\\CanonicalUrlBundle\\": ""
         }
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^2.8"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "vendor/bin/phpcs --config-set default_standard PSR2"
+        ]
     }
 }
