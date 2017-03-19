@@ -1,7 +1,8 @@
 <?php
 
-namespace Palmtree\CanonicalUrlBundle\Service;
+namespace Palmtree\CanonicalUrlBundle\EventListener;
 
+use Palmtree\CanonicalUrlBundle\Service\CanonicalUrlGenerator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -9,33 +10,34 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RouterInterface;
 
-class CanonicalUrlService
+class KernelEventListener
 {
     const CONTROLLER_PATTERN = '~^/app(?:_.+)*\.php~';
 
     /** @var RouterInterface */
     protected $router;
-    /** @var string */
-    protected $siteUrl;
-    /** @var int */
-    protected $redirectCode;
+    /** @var CanonicalUrlGenerator */
+    protected $urlGenerator;
     /** @var bool */
     protected $redirect;
+    /** @var int */
+    protected $redirectCode;
     /** @var bool */
     protected $trailingSlash;
 
     /**
      * CanonicalUrlService constructor.
-     * @param RouterInterface $router
-     * @param array           $config
+     * @param RouterInterface       $router
+     * @param CanonicalUrlGenerator $urlGenerator
+     * @param array                 $config
      */
-    public function __construct(RouterInterface $router, array $config = [])
+    public function __construct(RouterInterface $router, CanonicalUrlGenerator $urlGenerator, array $config = [])
     {
         $this->router = $router;
+        $this->urlGenerator = $urlGenerator;
 
-        $this->siteUrl       = $config['site_url'];
-        $this->redirectCode  = $config['redirect_code'];
         $this->redirect      = $config['redirect'];
+        $this->redirectCode  = $config['redirect_code'];
         $this->trailingSlash = $config['trailing_slash'];
     }
 
@@ -55,7 +57,7 @@ class CanonicalUrlService
         }
 
         $requestUrl   = $request->getSchemeAndHttpHost() . $request->getRequestUri();
-        $canonicalUrl = $this->generateUrl($route, $request->getQueryString());
+        $canonicalUrl = $this->urlGenerator->generateUrl($route, $request->getQueryString());
 
         if ($canonicalUrl && strcasecmp($requestUrl, $canonicalUrl) !== 0) {
             if ($this->redirect) {
@@ -119,38 +121,5 @@ class CanonicalUrlService
         } catch (ResourceNotFoundException $e) {
             return null;
         }
-    }
-
-    /**
-     * Returns the canonical URL for a route.
-     *
-     * @param string       $route
-     * @param array|string $parameters
-     *
-     * @return string
-     */
-    public function generateUrl($route, $parameters = [])
-    {
-        if (! $route) {
-            return '';
-        }
-
-        if (is_string($parameters)) {
-            parse_str($parameters, $parameters);
-        }
-
-        if (! $parameters) {
-            $parameters = [];
-        }
-
-        try {
-            $uri = $this->router->generate($route, $parameters);
-        } catch (\Exception $exception) {
-            return '';
-        }
-
-        $url = rtrim($this->siteUrl, '/') . '/' . ltrim($uri, '/');
-
-        return $url;
     }
 }

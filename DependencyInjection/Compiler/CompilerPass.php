@@ -13,7 +13,12 @@ class CompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $definition = $container->getDefinition('palmtree.canonical_url');
-        $definition->addArgument($container->getParameter('palmtree.canonical_url.config'));
+        $bundleConfig = $container->getParameter('palmtree.canonical_url.config');
+
+        $definition = $container->getDefinition('palmtree_canonical_url.url_generator');
+        $definition->addArgument($bundleConfig);
+
+        $definition = $container->getDefinition('palmtree_canonical_url.kernel_event_listener');
+        $definition->addArgument($bundleConfig);
     }
 }
