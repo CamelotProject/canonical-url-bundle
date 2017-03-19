@@ -80,11 +80,11 @@ class CanonicalUrlService
             $uri = $request->getRequestUri();
 
             // See if there's a matching route without a trailing slash
-            $match = $this->getAlternativeRoute($uri);
+            $route = $this->getAlternativeRoute($uri);
 
-            if ($match) {
+            if ($route) {
                 if ($this->redirect) {
-                    $url = $this->router->generate($match);
+                    $url = $this->router->generate($route);
                     $event->setResponse(new RedirectResponse($url, $this->redirectCode));
 
                     return;
@@ -122,7 +122,7 @@ class CanonicalUrlService
     }
 
     /**
-     * Returns a canonical URL for a route.
+     * Returns the canonical URL for a route.
      *
      * @param string       $route
      * @param array|string $parameters
