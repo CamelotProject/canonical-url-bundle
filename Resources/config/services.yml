@@ -5,3 +5,8 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+    palmtree.canonical_link_twig_extension:
+        class: Palmtree\CanonicalUrlBundle\Twig\Extension\CanonicalLinkExtension
+        arguments: ['@palmtree.canonical_url']
+        tags:
+            - { name: twig.extension }

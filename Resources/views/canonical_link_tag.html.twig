@@ -1,2 +1,2 @@
-{% set href = (href is defined) ? href : canonical_url.generateUrl(app.request.attributes.get('_route'), app.request.queryString) %}
+{% set href = (href is defined) ? href : palmtree_canonical_url.generateUrl(app.request.attributes.get('_route'), app.request.queryString) %}
 <link rel="canonical" href="{{ href }}">
