@@ -2,18 +2,20 @@
 
 namespace Palmtree\CanonicalUrlBundle\Twig\Extension;
 
-use Palmtree\CanonicalUrlBundle\Service\CanonicalUrlService;
+use Palmtree\CanonicalUrlBundle\Service\CanonicalUrlGenerator;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class CanonicalLinkExtension extends \Twig_Extension
 {
-    protected $canonicalUrlService;
+    /** @var CanonicalUrlGenerator */
+    protected $canonicalUrlGenerator;
+    /** @var RequestStack */
     protected $requestStack;
 
-    public function __construct(CanonicalUrlService $canonicalUrlService, RequestStack $requestStack)
+    public function __construct(CanonicalUrlGenerator $canonicalUrlGenerator, RequestStack $requestStack)
     {
-        $this->canonicalUrlService = $canonicalUrlService;
-        $this->requestStack        = $requestStack;
+        $this->canonicalUrlGenerator = $canonicalUrlGenerator;
+        $this->requestStack          = $requestStack;
     }
 
     public function getFunctions()
@@ -50,6 +52,6 @@ class CanonicalLinkExtension extends \Twig_Extension
             }
         }
 
-        return $this->canonicalUrlService->generateUrl($route, $parameters);
+        return $this->canonicalUrlGenerator->generateUrl($route, $parameters);
     }
 }
