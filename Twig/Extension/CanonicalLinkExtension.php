@@ -20,7 +20,20 @@ class CanonicalLinkExtension extends \Twig_Extension
     {
         return [
             new \Twig_Function('palmtree_canonical_url', [$this, 'generateUrl']),
+            new \Twig_Function('palmtree_canonical_link_tag', [$this, 'renderLinkTag'], [
+                'needs_environment' => true,
+                'is_safe' => ['html'],
+            ]),
         ];
+    }
+
+    public function renderLinkTag(\Twig_Environment $environment, $href = null)
+    {
+        $output = $environment->render('@PalmtreeCanonicalUrl/canonical_link_tag.html.twig', [
+            'href' => $href,
+        ]);
+
+        return $output;
     }
 
     public function generateUrl($route = null, $parameters = null)
