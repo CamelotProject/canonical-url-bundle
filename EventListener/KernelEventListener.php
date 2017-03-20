@@ -26,7 +26,7 @@ class KernelEventListener
     protected $trailingSlash;
 
     /**
-     * CanonicalUrlService constructor.
+     * KernelEventListener constructor.
      * @param RouterInterface       $router
      * @param CanonicalUrlGenerator $urlGenerator
      * @param array                 $config
