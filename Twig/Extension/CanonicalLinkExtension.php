@@ -29,8 +29,8 @@ class CanonicalLinkExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_Function('palmtree_canonical_url', [$this, 'generateUrl']),
-            new \Twig_Function('palmtree_canonical_link_tag', [$this, 'renderLinkTag'], [
+            new \Twig_SimpleFunction('palmtree_canonical_url', [$this, 'generateUrl']),
+            new \Twig_SimpleFunction('palmtree_canonical_link_tag', [$this, 'renderLinkTag'], [
                 'needs_environment' => true,
                 'is_safe'           => ['html'],
             ]),
