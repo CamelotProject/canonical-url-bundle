@@ -85,7 +85,7 @@ class KernelEventListener
             // See if there's a matching route without a trailing slash
             $route = $this->getAlternativeRoute($uri);
 
-            if ($route) {
+            if ($route !== null) {
                 if ($this->redirect) {
                     $parameters = $request->query->all();
                     $url        = $this->router->generate($route, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
