@@ -4,3 +4,7 @@ filter: {  }
 build:
     environment:
         php: '7.1.1'
+    cache:
+        directories:
+            - vendor/
+            - ~/.composer/cache/files
