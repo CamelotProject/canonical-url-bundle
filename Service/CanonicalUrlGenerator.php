@@ -2,6 +2,7 @@
 
 namespace Palmtree\CanonicalUrlBundle\Service;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 class CanonicalUrlGenerator
@@ -49,7 +50,7 @@ class CanonicalUrlGenerator
         }
 
         try {
-            $uri = $this->router->generate($route, $parameters);
+            $uri = $this->router->generate($route, $parameters, UrlGeneratorInterface::ABSOLUTE_PATH);
         } catch (\Exception $exception) {
             return '';
         }
