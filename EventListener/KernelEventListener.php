@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 class KernelEventListener
@@ -33,7 +34,7 @@ class KernelEventListener
      */
     public function __construct(RouterInterface $router, CanonicalUrlGenerator $urlGenerator, array $config = [])
     {
-        $this->router = $router;
+        $this->router       = $router;
         $this->urlGenerator = $urlGenerator;
 
         $this->redirect      = $config['redirect'];
@@ -86,8 +87,10 @@ class KernelEventListener
 
             if ($route) {
                 if ($this->redirect) {
-                    $url = $this->router->generate($route);
-                    $event->setResponse(new RedirectResponse($url, $this->redirectCode));
+                    $parameters = $request->query->all();
+                    $url        = $this->router->generate($route, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
+                    $response   = new RedirectResponse($url, $this->redirectCode);
+                    $event->setResponse($response);
 
                     return;
                 }
