@@ -51,7 +51,7 @@ class KernelEventListener
     {
         $request = $event->getRequest();
 
-        $route = $request->get('_route');
+        $route = $request->attributes->get('_route');
 
         if (!$route) {
             return;

@@ -64,8 +64,7 @@ class CanonicalLinkExtension extends \Twig_Extension
     {
         if ($route === null) {
             $request = $this->requestStack->getCurrentRequest();
-
-            $route = $request->attributes->get('_route');
+            $route   = $request->attributes->get('_route');
         }
 
         return $this->canonicalUrlGenerator->generate($route, $parameters);
