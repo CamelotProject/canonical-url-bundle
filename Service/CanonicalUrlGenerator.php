@@ -55,8 +55,8 @@ class CanonicalUrlGenerator
     }
 
     /**
-     * @param array $parameters
-     * @return array|string
+     * @param string|array $parameters
+     * @return array
      */
     protected function getParameters($parameters = [])
     {

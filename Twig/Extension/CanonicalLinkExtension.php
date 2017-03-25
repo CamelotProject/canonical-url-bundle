@@ -60,7 +60,7 @@ class CanonicalLinkExtension extends \Twig_Extension
      */
     public function generateUrl($route = null, $parameters = null)
     {
-        if (!$route) {
+        if ($route === null) {
             $request = $this->requestStack->getCurrentRequest();
 
             $route = $request->attributes->get('_route');

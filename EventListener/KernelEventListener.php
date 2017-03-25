@@ -57,8 +57,7 @@ class KernelEventListener
             return;
         }
 
-        $requestUrl = $request->getSchemeAndHttpHost() . $request->getRequestUri();
-        //$canonicalUrl = $this->urlGenerator->generateUrl($route, $request->getQueryString());
+        $requestUrl   = $request->getSchemeAndHttpHost() . $request->getRequestUri();
         $canonicalUrl = $this->urlGenerator->generateUrl($route, $request->query->all());
 
         if ($canonicalUrl && strcasecmp($requestUrl, $canonicalUrl) !== 0) {

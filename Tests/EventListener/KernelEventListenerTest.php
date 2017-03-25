@@ -74,5 +74,4 @@ class KernelEventListenerTest extends AbstractTest
 
         return $listener;
     }
-
 }
