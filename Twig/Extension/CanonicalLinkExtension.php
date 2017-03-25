@@ -12,12 +12,20 @@ class CanonicalLinkExtension extends \Twig_Extension
     /** @var RequestStack */
     protected $requestStack;
 
+    /**
+     * CanonicalLinkExtension constructor.
+     * @param CanonicalUrlGenerator $canonicalUrlGenerator
+     * @param RequestStack          $requestStack
+     */
     public function __construct(CanonicalUrlGenerator $canonicalUrlGenerator, RequestStack $requestStack)
     {
         $this->canonicalUrlGenerator = $canonicalUrlGenerator;
         $this->requestStack          = $requestStack;
     }
 
+    /**
+     * @return array
+     */
     public function getFunctions()
     {
         return [
@@ -29,6 +37,12 @@ class CanonicalLinkExtension extends \Twig_Extension
         ];
     }
 
+    /**
+     * @param \Twig_Environment $environment
+     * @param string            $href
+     *
+     * @return string
+     */
     public function renderLinkTag(\Twig_Environment $environment, $href = null)
     {
         $output = $environment->render('@PalmtreeCanonicalUrl/canonical_link_tag.html.twig', [
@@ -38,6 +52,12 @@ class CanonicalLinkExtension extends \Twig_Extension
         return $output;
     }
 
+    /**
+     * @param string       $route
+     * @param string|array $parameters
+     *
+     * @return string
+     */
     public function generateUrl($route = null, $parameters = null)
     {
         if (!$parameters || !$route) {

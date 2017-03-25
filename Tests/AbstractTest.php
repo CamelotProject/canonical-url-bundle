@@ -12,6 +12,11 @@ use Symfony\Component\Routing\Router;
 
 abstract class AbstractTest extends TestCase
 {
+    /**
+     * @param RouteCollection|null $routeCollection
+     *
+     * @return Router
+     */
     protected function getRouter($routeCollection = null)
     {
         if (!$routeCollection) {
@@ -31,6 +36,9 @@ abstract class AbstractTest extends TestCase
         return $router;
     }
 
+    /**
+     * @return RouteCollection
+     */
     protected function getFooRouteCollection()
     {
         $routeCollection = new RouteCollection();
@@ -54,6 +62,9 @@ abstract class AbstractTest extends TestCase
         return $request;
     }
 
+    /**
+     * @return array
+     */
     public function configProvider()
     {
         return [

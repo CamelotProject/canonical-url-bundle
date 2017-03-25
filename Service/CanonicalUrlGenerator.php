@@ -41,13 +41,7 @@ class CanonicalUrlGenerator
             return '';
         }
 
-        if (is_string($parameters)) {
-            parse_str($parameters, $parameters);
-        }
-
-        if (!$parameters) {
-            $parameters = [];
-        }
+        $parameters = $this->getParameters($parameters);
 
         try {
             $uri = $this->router->generate($route, $parameters, UrlGeneratorInterface::ABSOLUTE_PATH);
@@ -58,5 +52,22 @@ class CanonicalUrlGenerator
         $url = rtrim($this->siteUrl, '/') . '/' . ltrim($uri, '/');
 
         return $url;
+    }
+
+    /**
+     * @param array $parameters
+     * @return array|string
+     */
+    protected function getParameters($parameters = [])
+    {
+        if (is_string($parameters)) {
+            parse_str($parameters, $parameters);
+        }
+
+        if (!$parameters) {
+            $parameters = [];
+        }
+
+        return $parameters;
     }
 }

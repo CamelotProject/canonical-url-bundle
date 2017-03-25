@@ -9,7 +9,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class CanonicalLinkExtensionTest extends AbstractTest
 {
-    /** @dataProvider configProvider
+    /**
+     * @dataProvider configProvider
      * @param array $config
      */
     public function testGenerateUrlMethod(array $config)
@@ -21,22 +22,11 @@ class CanonicalLinkExtensionTest extends AbstractTest
         $this->assertEquals('https://example.org/foo', $url);
     }
 
-    protected function getExtension($config)
-    {
-        $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
-        $requestStack = new RequestStack();
-
-        $requestStack->push($this->getFooRequest());
-
-        $extension = new CanonicalLinkExtension($urlGenerator, $requestStack);
-
-        return $extension;
-    }
-
-    /** @dataProvider configProvider
-     * @param $config
+    /**
+     * @dataProvider configProvider
+     * @param array $config
      */
-    public function testRenderLinkTag($config)
+    public function testRenderLinkTag(array $config)
     {
         $extension = $this->getExtension($config);
 
@@ -55,5 +45,21 @@ class CanonicalLinkExtensionTest extends AbstractTest
         $html = trim($html);
 
         $this->assertEquals('<link rel="canonical" href="https://example.org">', $html);
+    }
+
+    /**
+     * @param $config
+     * @return CanonicalLinkExtension
+     */
+    protected function getExtension($config)
+    {
+        $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
+        $requestStack = new RequestStack();
+
+        $requestStack->push($this->getFooRequest());
+
+        $extension = new CanonicalLinkExtension($urlGenerator, $requestStack);
+
+        return $extension;
     }
 }
