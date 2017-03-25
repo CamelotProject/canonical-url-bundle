@@ -19,6 +19,18 @@ class CanonicalLinkExtensionTest extends AbstractTest
         $this->assertEquals('https://example.org/foo', $url);
     }
 
+    protected function getExtension($config)
+    {
+        $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
+        $requestStack = new RequestStack();
+
+        $requestStack->push($this->getFooRequest());
+
+        $extension = new CanonicalLinkExtension($urlGenerator, $requestStack);
+
+        return $extension;
+    }
+
     /** @dataProvider configProvider */
     public function testRenderLinkTag($config)
     {
@@ -39,17 +51,5 @@ class CanonicalLinkExtensionTest extends AbstractTest
         $html = trim($html);
 
         $this->assertEquals('<link rel="canonical" href="https://example.org">', $html);
-    }
-
-    protected function getExtension($config)
-    {
-        $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
-        $requestStack = new RequestStack();
-
-        $requestStack->push($this->getFooRequest());
-
-        $extension = new CanonicalLinkExtension($urlGenerator, $requestStack);
-
-        return $extension;
     }
 }

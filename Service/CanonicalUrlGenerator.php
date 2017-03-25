@@ -37,7 +37,7 @@ class CanonicalUrlGenerator
      */
     public function generateUrl($route, $parameters = [])
     {
-        if (! $route) {
+        if (!$route) {
             return '';
         }
 
@@ -45,7 +45,7 @@ class CanonicalUrlGenerator
             parse_str($parameters, $parameters);
         }
 
-        if (! $parameters) {
+        if (!$parameters) {
             $parameters = [];
         }
 

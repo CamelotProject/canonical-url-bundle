@@ -24,7 +24,7 @@ class CanonicalLinkExtension extends \Twig_Extension
             new \Twig_Function('palmtree_canonical_url', [$this, 'generateUrl']),
             new \Twig_Function('palmtree_canonical_link_tag', [$this, 'renderLinkTag'], [
                 'needs_environment' => true,
-                'is_safe' => ['html'],
+                'is_safe'           => ['html'],
             ]),
         ];
     }
@@ -40,14 +40,14 @@ class CanonicalLinkExtension extends \Twig_Extension
 
     public function generateUrl($route = null, $parameters = null)
     {
-        if (! $parameters || ! $route) {
+        if (!$parameters || !$route) {
             $request = $this->requestStack->getCurrentRequest();
 
-            if (! $route) {
+            if (!$route) {
                 $route = $request->attributes->get('_route');
             }
 
-            if (! $parameters) {
+            if (!$parameters) {
                 $parameters = $request->getQueryString();
             }
         }

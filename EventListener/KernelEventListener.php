@@ -53,7 +53,7 @@ class KernelEventListener
 
         $route = $request->get('_route');
 
-        if (! $route) {
+        if (!$route) {
             return;
         }
 

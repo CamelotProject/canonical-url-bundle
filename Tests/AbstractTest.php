@@ -12,9 +12,9 @@ use Symfony\Component\Routing\Router;
 
 abstract class AbstractTest extends TestCase
 {
-    public function getRouter($routeCollection = null)
+    protected function getRouter($routeCollection = null)
     {
-        if (! $routeCollection) {
+        if (!$routeCollection) {
             $routeCollection = $this->getFooRouteCollection();
         }
 
@@ -31,7 +31,7 @@ abstract class AbstractTest extends TestCase
         return $router;
     }
 
-    public function getFooRouteCollection()
+    protected function getFooRouteCollection()
     {
         $routeCollection = new RouteCollection();
         $routeCollection->add('foo', new Route('/foo'));

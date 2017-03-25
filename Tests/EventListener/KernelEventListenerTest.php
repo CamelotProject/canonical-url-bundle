@@ -37,6 +37,20 @@ class KernelEventListenerTest extends AbstractTest
     }
 
     /**
+     * @param array $config
+     * @return KernelEventListener
+     */
+    protected function getKernelEventListener(array $config)
+    {
+        $router = $this->getRouter();
+
+        $urlGenerator = new CanonicalUrlGenerator($router, $config);
+        $listener     = new KernelEventListener($router, $urlGenerator, $config);
+
+        return $listener;
+    }
+
+    /**
      * @dataProvider configProvider
      * @param array $config
      */
@@ -58,19 +72,5 @@ class KernelEventListenerTest extends AbstractTest
 
         $this->assertTrue($response instanceof RedirectResponse);
         $this->assertTrue($response->getTargetUrl() === 'https://example.org/foo');
-    }
-
-    /**
-     * @param array $config
-     * @return KernelEventListener
-     */
-    protected function getKernelEventListener(array $config)
-    {
-        $router = $this->getRouter();
-
-        $urlGenerator = new CanonicalUrlGenerator($router, $config);
-        $listener     = new KernelEventListener($router, $urlGenerator, $config);
-
-        return $listener;
     }
 }
