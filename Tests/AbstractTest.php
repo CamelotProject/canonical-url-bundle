@@ -56,15 +56,15 @@ abstract class AbstractTest extends TestCase
 
     public function configProvider()
     {
-        return array(
-            'config' => array(
-                array(
+        return [
+            'config' => [
+                [
                     'site_url'       => 'https://example.org',
                     'redirect'       => true,
                     'redirect_code'  => 302,
                     'trailing_slash' => false,
-                )
-            )
-        );
+                ]
+            ]
+        ];
     }
 }

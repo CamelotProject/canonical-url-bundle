@@ -13,6 +13,7 @@ class CompilerPassTest extends AbstractTest
 {
     /**
      * @dataProvider configProvider
+     * @param array $config
      */
     public function testAddConfigArgumentToServiceDefinitions(array $config)
     {

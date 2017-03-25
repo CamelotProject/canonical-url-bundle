@@ -14,17 +14,17 @@ class ConfigurationTest extends AbstractTest
      */
     public function testProcessSimpleCase()
     {
-        $configs = array(
-            array(
+        $configs = [
+            [
                 'site_url'       => 'https://example.org',
                 'redirect'       => true,
                 'redirect_code'  => 302,
                 'trailing_slash' => true,
-            ),
-            array(
+            ],
+            [
                 'trailing_slash' => false
-            )
-        );
+            ]
+        ];
 
         $config = $this->process($configs);
 
@@ -38,11 +38,11 @@ class ConfigurationTest extends AbstractTest
      */
     public function testInvalidSiteUrl()
     {
-        $configs = array(
-            array(
+        $configs = [
+            [
                 'site_url' => false,
-            )
-        );
+            ]
+        ];
 
         $this->process($configs);
     }
@@ -52,11 +52,11 @@ class ConfigurationTest extends AbstractTest
      */
     public function testInvalidRedirectCode()
     {
-        $configs = array(
-            array(
+        $configs = [
+            [
                 'redirect_code' => 404,
-            )
-        );
+            ]
+        ];
 
         $this->process($configs);
     }
@@ -66,11 +66,11 @@ class ConfigurationTest extends AbstractTest
      */
     public function testInvalidRedirect()
     {
-        $configs = array(
-            array(
+        $configs = [
+            [
                 'redirect' => 9,
-            )
-        );
+            ]
+        ];
 
         $this->process($configs);
     }

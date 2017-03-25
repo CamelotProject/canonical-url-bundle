@@ -17,6 +17,7 @@ class KernelEventListenerTest extends AbstractTest
 {
     /**
      * @dataProvider configProvider
+     * @param array $config
      */
     public function testCanonicalRedirect(array $config)
     {

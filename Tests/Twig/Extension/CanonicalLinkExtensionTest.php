@@ -9,7 +9,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class CanonicalLinkExtensionTest extends AbstractTest
 {
-    /** @dataProvider configProvider */
+    /** @dataProvider configProvider
+     * @param array $config
+     */
     public function testGenerateUrlMethod(array $config)
     {
         $extension = $this->getExtension($config);
@@ -31,7 +33,9 @@ class CanonicalLinkExtensionTest extends AbstractTest
         return $extension;
     }
 
-    /** @dataProvider configProvider */
+    /** @dataProvider configProvider
+     * @param $config
+     */
     public function testRenderLinkTag($config)
     {
         $extension = $this->getExtension($config);
@@ -39,11 +43,11 @@ class CanonicalLinkExtensionTest extends AbstractTest
         $loader = new \Twig_Loader_Filesystem();
         $loader->setPaths(__DIR__ . '/../../../Resources/views', 'PalmtreeCanonicalUrl');
 
-        $twig = new \Twig_Environment($loader, array(
+        $twig = new \Twig_Environment($loader, [
             'debug'      => true,
             'cache'      => false,
             'autoescape' => 'html',
-        ));
+        ]);
 
         $twig->addExtension($extension);
 
