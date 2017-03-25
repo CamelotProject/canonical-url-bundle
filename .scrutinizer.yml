@@ -8,3 +8,10 @@ build:
         directories:
             - vendor/
             - ~/.composer/cache/files
+    tests:
+        override:
+            -
+                command: 'vendor/bin/phpunit --coverage-clover=coverage'
+                coverage:
+                    file: 'coverage'
+                    format: 'clover'

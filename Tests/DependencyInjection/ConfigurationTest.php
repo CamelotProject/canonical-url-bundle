@@ -16,9 +16,9 @@ class ConfigurationTest extends AbstractTest
     {
         $configs = array(
             array(
-                'site_url' => 'https://example.org',
-                'redirect' => true,
-                'redirect_code' => 302,
+                'site_url'       => 'https://example.org',
+                'redirect'       => true,
+                'redirect_code'  => 302,
                 'trailing_slash' => true,
             ),
             array(
@@ -44,7 +44,7 @@ class ConfigurationTest extends AbstractTest
             )
         );
 
-        $config = $this->process($configs);
+        $this->process($configs);
     }
 
     /**
@@ -58,7 +58,7 @@ class ConfigurationTest extends AbstractTest
             )
         );
 
-        $config = $this->process($configs);
+        $this->process($configs);
     }
 
     /**
@@ -72,7 +72,7 @@ class ConfigurationTest extends AbstractTest
             )
         );
 
-        $config = $this->process($configs);
+        $this->process($configs);
     }
 
     /**
