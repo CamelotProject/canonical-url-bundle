@@ -1,9 +1,9 @@
 # CanonicalUrlBundle
 
 [![License](http://img.shields.io/packagist/l/palmtree/canonical-url-bundle.svg)](LICENSE)
-[![Travis](https://img.shields.io/travis/palmtreephp/canonical-url-bundle.svg)]()
-[![Scrutinizer](https://img.shields.io/scrutinizer/g/palmtreephp/canonical-url-bundle.svg)]()
-[![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/palmtreephp/canonical-url-bundle.svg)]()
+[![Travis](https://img.shields.io/travis/palmtreephp/canonical-url-bundle.svg)](https://travis-ci.org/palmtreephp/canonical-url-bundle)
+[![Scrutinizer](https://img.shields.io/scrutinizer/g/palmtreephp/canonical-url-bundle.svg)](https://scrutinizer-ci.com/g/palmtreephp/canonical-url-bundle/)
+[![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/palmtreephp/canonical-url-bundle.svg)](https://scrutinizer-ci.com/g/palmtreephp/canonical-url-bundle/)
 
 The `CanonicalUrlBundle` is a Symfony bundle to redirect requests from multiple URLs for the same resource to a single canonical URL.
 
