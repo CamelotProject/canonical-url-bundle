@@ -1,4 +1,6 @@
 checks:
     php: true
 filter: {  }
-build: true
+build:
+    environment:
+        php: '7.1.1'
