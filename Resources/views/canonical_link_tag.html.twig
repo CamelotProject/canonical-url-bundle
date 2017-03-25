@@ -1,1 +1,4 @@
-<link rel="canonical" href="{{ (href is not empty) ? href : palmtree_canonical_url() }}">
+{% set href = (href is not empty) ? href : palmtree_canonical_url() %}
+{% if href is not empty %}
+<link rel="canonical" href="{{ href }}">
+{% endif %}
