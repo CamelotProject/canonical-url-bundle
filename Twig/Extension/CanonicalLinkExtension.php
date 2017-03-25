@@ -24,7 +24,7 @@ class CanonicalLinkExtension extends \Twig_Extension
     }
 
     /**
-     * @return array
+     * @return \Twig_Function[]
      */
     public function getFunctions()
     {
