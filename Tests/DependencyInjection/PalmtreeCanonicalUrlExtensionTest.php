@@ -25,6 +25,11 @@ class PalmtreeCanonicalUrlExtensionTest extends AbstractTest
     public function testGetAlias()
     {
         $extension = new PalmtreeCanonicalUrlExtension();
-        $this->assertEquals('palmtree_canonical_url', $extension->getAlias(), 'getAlias returns "palmtree.caonical_url"');
+
+        $this->assertEquals(
+            'palmtree_canonical_url',
+            $extension->getAlias(),
+            'getAlias returns "palmtree_canonical_url"'
+        );
     }
 }
