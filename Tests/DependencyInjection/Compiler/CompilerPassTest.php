@@ -36,18 +36,4 @@ class CompilerPassTest extends AbstractTest
             $this->assertEquals($config, $container->getDefinition($id)->getArgument(0));
         }
     }
-
-    public function configProvider()
-    {
-        return array(
-            'config' => array(
-                array(
-                    'site_url'       => 'https://example.org',
-                    'redirect'       => true,
-                    'redirect_code'  => 302,
-                    'trailing_slash' => false,
-                )
-            )
-        );
-    }
 }
