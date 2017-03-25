@@ -57,12 +57,13 @@ class KernelEventListener
             return;
         }
 
-        $requestUrl   = $request->getSchemeAndHttpHost() . $request->getRequestUri();
-        $canonicalUrl = $this->urlGenerator->generateUrl($route, $request->query->all());
+        $requestUrl   = urldecode(strtok($request->getUri(), '?'));
+        $canonicalUrl = urldecode($this->urlGenerator->generate($route));
 
         if ($canonicalUrl && strcasecmp($requestUrl, $canonicalUrl) !== 0) {
             if ($this->redirect) {
-                $event->setResponse(new RedirectResponse($canonicalUrl, $this->redirectCode));
+                $response = new RedirectResponse($canonicalUrl, $this->redirectCode);
+                $event->setResponse($response);
             }
         }
     }

@@ -30,12 +30,12 @@ class CanonicalUrlGenerator
     /**
      * Returns the canonical URL for a route.
      *
-     * @param string       $route
-     * @param array|string $parameters
+     * @param string       $route      Route to generate a URL for.
+     * @param string|array $parameters String in 'key1=val1&key2=val2' format or array of query parameters.
      *
      * @return string
      */
-    public function generateUrl($route, $parameters = [])
+    public function generate($route, $parameters = [])
     {
         if (!$route) {
             return '';

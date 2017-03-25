@@ -15,7 +15,7 @@ class CanonicalUrlGeneratorTest extends AbstractTest
     {
         $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
 
-        $url = $urlGenerator->generateUrl('foo');
+        $url = $urlGenerator->generate('foo');
 
         $this->assertEquals('https://example.org/foo', $url);
     }

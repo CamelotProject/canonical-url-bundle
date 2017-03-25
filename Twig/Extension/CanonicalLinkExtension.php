@@ -56,6 +56,8 @@ class CanonicalLinkExtension extends \Twig_Extension
      * @param string       $route
      * @param string|array $parameters
      *
+     * @see CanonicalUrlGenerator::generate() For parameter descriptions.
+     *
      * @return string
      */
     public function generateUrl($route = null, $parameters = null)
@@ -66,6 +68,6 @@ class CanonicalLinkExtension extends \Twig_Extension
             $route = $request->attributes->get('_route');
         }
 
-        return $this->canonicalUrlGenerator->generateUrl($route, $parameters);
+        return $this->canonicalUrlGenerator->generate($route, $parameters);
     }
 }
