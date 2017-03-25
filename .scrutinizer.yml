@@ -1,0 +1,4 @@
+checks:
+    php: true
+filter: {  }
+build: true
