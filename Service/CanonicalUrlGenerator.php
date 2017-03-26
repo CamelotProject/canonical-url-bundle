@@ -43,12 +43,7 @@ class CanonicalUrlGenerator
 
         $parameters = $this->getParameters($parameters);
 
-        try {
-            $uri = $this->router->generate($route, $parameters, UrlGeneratorInterface::ABSOLUTE_PATH);
-        } catch (\Exception $exception) {
-            return '';
-        }
-
+        $uri = $this->router->generate($route, $parameters, UrlGeneratorInterface::ABSOLUTE_PATH);
         $url = rtrim($this->siteUrl, '/') . '/' . ltrim($uri, '/');
 
         return $url;
