@@ -87,6 +87,32 @@ class KernelEventListenerTest extends AbstractTest
      * @dataProvider configProvider
      * @param array $config
      */
+    public function testNoTrailingSlashRedirect(array $config)
+    {
+        $config['trailing_slash'] = true;
+
+        $event = new GetResponseForExceptionEvent(
+            new TestHttpKernel(),
+            $this->getBazRequest(true, false),
+            HttpKernelInterface::MASTER_REQUEST,
+            new NotFoundHttpException('')
+        );
+
+        $listener = $this->getKernelEventListener($config);
+
+        $listener->onKernelException($event);
+
+        /** @var RedirectResponse $response */
+        $response = $event->getResponse();
+
+        $this->assertTrue($response instanceof RedirectResponse);
+        $this->assertEquals('https://example.org/baz/', $response->getTargetUrl());
+    }
+
+    /**
+     * @dataProvider configProvider
+     * @param array $config
+     */
     public function testKernelRequestListenerDoesNothingWithEmptyRoute(array $config)
     {
         $event = new GetResponseEvent(
