@@ -54,17 +54,17 @@ abstract class AbstractTest extends TestCase
      * @param bool $trailingSlash
      * @return Request
      */
-    protected function getFooRequest($secure = true, $trailingSlash = true)
+    protected function getMockRequest($path, $secure = true, $trailingSlash = true)
     {
         $scheme = ($secure) ? 'https' : 'http';
-        $uri    = "$scheme://example.org/foo";
+        $uri    = "$scheme://example.org/$path";
 
         if ($trailingSlash) {
             $uri .= '/';
         }
 
         $request = Request::create($uri);
-        $request->attributes->set('_route', 'foo');
+        $request->attributes->set('_route', $path);
 
         return $request;
     }
@@ -74,19 +74,19 @@ abstract class AbstractTest extends TestCase
      * @param bool $trailingSlash
      * @return Request
      */
+    protected function getFooRequest($secure = true, $trailingSlash = true)
+    {
+        return $this->getMockRequest('foo', $secure, $trailingSlash);
+    }
+
+    /**
+     * @param bool $secure
+     * @param bool $trailingSlash
+     * @return Request
+     */
     protected function getBazRequest($secure = true, $trailingSlash = true)
     {
-        $scheme = ($secure) ? 'https' : 'http';
-        $uri    = "$scheme://example.org/baz";
-
-        if ($trailingSlash) {
-            $uri .= '/';
-        }
-
-        $request = Request::create($uri);
-        $request->attributes->set('_route', 'baz');
-
-        return $request;
+        return $this->getMockRequest('baz', $secure, $trailingSlash);
     }
 
     /**
