@@ -46,10 +46,10 @@ Add your configuration for the bundle to `app/config/config.yml`:
 
 ```yaml
 palmtree_canonical_url:
-    site_url:       'https://example.org' # replace with your site URL (without trailing slash)
+    site_url:       'https://example.org' # replace with your full site URL (without trailing slash)
     redirect:       true # Set to false disable redirects if you just want to use the canonical link tag
     redirect_code:  301 # Leave this at 301 for SEO
-    trailing_slash: false # Whether canonical URLs should contain a trailing slash
+    trailing_slash: false # Set to true if your routes and canonical URLs contain a trailing slash
 ```
 
 ## Usage
