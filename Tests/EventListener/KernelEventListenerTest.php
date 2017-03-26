@@ -6,6 +6,7 @@ use Palmtree\CanonicalUrlBundle\EventListener\KernelEventListener;
 use Palmtree\CanonicalUrlBundle\Service\CanonicalUrlGenerator;
 use Palmtree\CanonicalUrlBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -33,8 +34,29 @@ class KernelEventListenerTest extends AbstractTest
         $listener = $this->getKernelEventListener($config);
         $listener->onKernelRequest($event);
 
-        $this->assertNotEquals($response, $event->getResponse());
+        $this->assertNotSame($response, $event->getResponse());
         $this->assertTrue($event->getResponse() instanceof RedirectResponse);
+    }
+
+    /**
+     * @dataProvider configProvider
+     * @param array $config
+     */
+    public function testNoRedirectWhenUrlIsCanonical(array $config)
+    {
+        $event = new GetResponseEvent(
+            new TestHttpKernel(),
+            $this->getFooRequest(true, false),
+            HttpKernelInterface::MASTER_REQUEST
+        );
+
+        $response = new Response();
+        $event->setResponse($response);
+
+        $listener = $this->getKernelEventListener($config);
+        $listener->onKernelRequest($event);
+
+        $this->assertSame($response, $event->getResponse());
     }
 
     /**
@@ -58,7 +80,48 @@ class KernelEventListenerTest extends AbstractTest
         $response = $event->getResponse();
 
         $this->assertTrue($response instanceof RedirectResponse);
-        $this->assertTrue($response->getTargetUrl() === 'https://example.org/foo');
+        $this->assertEquals('https://example.org/foo', $response->getTargetUrl());
+    }
+
+    /**
+     * @dataProvider configProvider
+     * @param array $config
+     */
+    public function testKernelRequestListenerDoesNothingWithEmptyRoute(array $config)
+    {
+        $event = new GetResponseEvent(
+            new TestHttpKernel(),
+            new Request(),
+            HttpKernelInterface::MASTER_REQUEST
+        );
+
+        $listener = $this->getKernelEventListener($config);
+
+        $returnValue = $listener->onKernelRequest($event);
+
+        $this->assertFalse($returnValue);
+    }
+
+    /**
+     * @dataProvider configProvider
+     * @param array $config
+     */
+    public function testNonMatchingAlternativeRouteReturnsFalse(array $config)
+    {
+        $request = Request::create('https://example.org/bar/');
+
+        $event = new GetResponseForExceptionEvent(
+            new TestHttpKernel(),
+            $request,
+            HttpKernelInterface::MASTER_REQUEST,
+            new NotFoundHttpException('')
+        );
+
+        $listener = $this->getKernelEventListener($config);
+
+        $returnValue = $listener->onKernelException($event);
+
+        $this->assertFalse($returnValue);
     }
 
     /**
