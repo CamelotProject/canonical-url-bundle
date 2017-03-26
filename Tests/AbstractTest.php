@@ -43,6 +43,7 @@ abstract class AbstractTest extends TestCase
     {
         $routeCollection = new RouteCollection();
         $routeCollection->add('foo', new Route('/foo'));
+        $routeCollection->add('baz', new Route('/baz/'));
         $routeCollection->setHost('example.org');
 
         return $routeCollection;
@@ -64,6 +65,26 @@ abstract class AbstractTest extends TestCase
 
         $request = Request::create($uri);
         $request->attributes->set('_route', 'foo');
+
+        return $request;
+    }
+
+    /**
+     * @param bool $secure
+     * @param bool $trailingSlash
+     * @return Request
+     */
+    protected function getBazRequest($secure = true, $trailingSlash = true)
+    {
+        $scheme = ($secure) ? 'https' : 'http';
+        $uri    = "$scheme://example.org/baz";
+
+        if ($trailingSlash) {
+            $uri .= '/';
+        }
+
+        $request = Request::create($uri);
+        $request->attributes->set('_route', 'baz');
 
         return $request;
     }
