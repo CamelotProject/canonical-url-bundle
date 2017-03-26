@@ -46,6 +46,8 @@ class KernelEventListener
      * Listener for the 'kernel.request' event.
      *
      * @param GetResponseEvent $event
+     *
+     * @return bool
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
@@ -54,24 +56,36 @@ class KernelEventListener
         $route = $request->attributes->get('_route');
 
         if (!$route) {
-            return;
+            return false;
         }
 
-        $requestUrl   = urldecode(strtok($request->getUri(), '?'));
-        $canonicalUrl = urldecode($this->urlGenerator->generate($route));
+        $params = $request->attributes->get('_route_params');
 
-        if ($canonicalUrl && strcasecmp($requestUrl, $canonicalUrl) !== 0) {
+        // Get full request URL without query string.
+        $requestUrl = urldecode(strtok($request->getUri(), '?'));
+
+        $redirectUrl = $this->urlGenerator->generate($route, $params);
+        // Compare without query string
+        $canonicalUrl = urldecode(strtok($redirectUrl, '?'));
+
+        if ($redirectUrl && strcasecmp($requestUrl, $canonicalUrl) !== 0) {
             if ($this->redirect) {
-                $response = new RedirectResponse($canonicalUrl, $this->redirectCode);
+                $response = new RedirectResponse($redirectUrl, $this->redirectCode);
                 $event->setResponse($response);
+
+                return true;
             }
         }
+
+        return false;
     }
 
     /**
      * Listener for the 'kernel.exception' event.
      *
      * @param GetResponseForExceptionEvent $event
+     *
+     * @return bool
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
@@ -93,10 +107,12 @@ class KernelEventListener
                     $response   = new RedirectResponse($url, $this->redirectCode);
                     $event->setResponse($response);
 
-                    return;
+                    return true;
                 }
             }
         }
+
+        return false;
     }
 
     /**
