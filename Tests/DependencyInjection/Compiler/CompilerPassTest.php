@@ -34,7 +34,7 @@ class CompilerPassTest extends AbstractTest
         $compilerPass->process($container);
 
         foreach ($definitions as $id => $definition) {
-            $this->assertEquals($config, $container->getDefinition($id)->getArgument(0));
+            $this->assertSame($config, $container->getDefinition($id)->getArgument(0));
         }
     }
 }
