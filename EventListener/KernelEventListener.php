@@ -62,7 +62,8 @@ class KernelEventListener
         $params = $request->attributes->get('_route_params');
 
         // Get full request URL without query string.
-        $requestUrl = urldecode(strtok($request->getUri(), '?'));
+        $requestUrl = $request->getSchemeAndHttpHost() . $request->getRequestUri();
+        $requestUrl = urldecode(strtok($requestUrl, '?'));
 
         $redirectUrl = $this->urlGenerator->generate($route, $params);
         // Compare without query string
