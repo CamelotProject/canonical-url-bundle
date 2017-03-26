@@ -26,6 +26,19 @@ class CanonicalLinkExtensionTest extends AbstractTest
      * @dataProvider configProvider
      * @param array $config
      */
+    public function testGenerateUrlMethodWithNoRouteDefaultsToCurrentRequest(array $config)
+    {
+        $extension = $this->getExtension($config);
+
+        $url = $extension->generateUrl();
+
+        $this->assertEquals('https://example.org/foo', $url);
+    }
+
+    /**
+     * @dataProvider configProvider
+     * @param array $config
+     */
     public function testRenderLinkTag(array $config)
     {
         $extension = $this->getExtension($config);

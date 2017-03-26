@@ -151,6 +151,28 @@ class KernelEventListenerTest extends AbstractTest
     }
 
     /**
+     * @dataProvider configProvider
+     * @param array $config
+     */
+    public function testKernelRequestListenerDoesNothingForNonExistentRoute(array $config)
+    {
+        $request = Request::create('https://example.org/bar');
+
+        $event = new GetResponseForExceptionEvent(
+            new TestHttpKernel(),
+            $request,
+            HttpKernelInterface::MASTER_REQUEST,
+            new NotFoundHttpException('')
+        );
+
+        $listener = $this->getKernelEventListener($config);
+
+        $returnValue = $listener->onKernelException($event);
+
+        $this->assertFalse($returnValue);
+    }
+
+    /**
      * @param array $config
      * @return KernelEventListener
      */
