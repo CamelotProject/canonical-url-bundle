@@ -50,13 +50,19 @@ abstract class AbstractTest extends TestCase
 
     /**
      * @param bool $secure
+     * @param bool $trailingSlash
      * @return Request
      */
-    protected function getFooRequest($secure = true)
+    protected function getFooRequest($secure = true, $trailingSlash = true)
     {
         $scheme = ($secure) ? 'https' : 'http';
+        $uri    = "$scheme://example.org/foo";
 
-        $request = Request::create("$scheme://example.org/foo/");
+        if ($trailingSlash) {
+            $uri .= '/';
+        }
+
+        $request = Request::create($uri);
         $request->attributes->set('_route', 'foo');
 
         return $request;
