@@ -96,16 +96,24 @@ class KernelEventListener
             // We're about to throw a 404 error, try to resolve it
             $request = $event->getRequest();
 
-            $uri = $request->getRequestUri();
+            $uri = strtok($request->getRequestUri(), '?');
 
             // See if there's a matching route without a trailing slash
-            $route = $this->getAlternativeRoute($uri);
+            $match = $this->getAlternativeRoute($uri);
 
-            if ($route !== null) {
+            if ($match !== null) {
                 if ($this->redirect) {
-                    $parameters = $request->query->all();
-                    $url        = $this->router->generate($route, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
-                    $response   = new RedirectResponse($url, $this->redirectCode);
+                    $params = $request->query->all();
+
+                    foreach ($match as $key => $value) {
+                        if ($key[0] !== '_') {
+                            $params[$key] = $value;
+                        }
+                    }
+
+                    $url = $this->router->generate($match['_route'], $params, UrlGeneratorInterface::ABSOLUTE_URL);
+
+                    $response = new RedirectResponse($url, $this->redirectCode);
                     $event->setResponse($response);
 
                     return true;
@@ -119,7 +127,7 @@ class KernelEventListener
     /**
      * @param string $uri
      *
-     * @return string|null
+     * @return array|null
      */
     protected function getAlternativeRoute($uri)
     {
@@ -138,7 +146,7 @@ class KernelEventListener
         try {
             $match = $this->router->match($alternativeUri);
 
-            return $match['_route'];
+            return $match;
         } catch (ResourceNotFoundException $e) {
             return null;
         }

@@ -31,19 +31,19 @@ class CanonicalUrlGenerator
      * Returns the canonical URL for a route.
      *
      * @param string       $route      Route to generate a URL for.
-     * @param string|array $parameters String in 'key1=val1&key2=val2' format or array of query parameters.
+     * @param string|array $params String in 'key1=val1&key2=val2' format or array of query parameters.
      *
      * @return string
      */
-    public function generate($route, $parameters = [])
+    public function generate($route, $params = [])
     {
         if (!$route) {
             return '';
         }
 
-        $parameters = $this->getParameters($parameters);
+        $params = $this->getParameters($params);
 
-        $uri = $this->router->generate($route, $parameters, UrlGeneratorInterface::ABSOLUTE_PATH);
+        $uri = $this->router->generate($route, $params, UrlGeneratorInterface::ABSOLUTE_PATH);
         $url = rtrim($this->siteUrl, '/') . '/' . ltrim($uri, '/');
 
         return $url;
