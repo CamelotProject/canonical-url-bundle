@@ -22,11 +22,8 @@ class KernelEventListenerTest extends AbstractTest
      */
     public function testCanonicalRedirect(array $config)
     {
-        $event = new GetResponseEvent(
-            new TestHttpKernel(),
-            $this->getFooRequest(false),
-            HttpKernelInterface::MASTER_REQUEST
-        );
+        $request = $this->getFooRequest(false);
+        $event   = $this->getGetResponseEvent($request);
 
         $response = new Response();
         $event->setResponse($response);
@@ -44,11 +41,8 @@ class KernelEventListenerTest extends AbstractTest
      */
     public function testNoRedirectWhenUrlIsCanonical(array $config)
     {
-        $event = new GetResponseEvent(
-            new TestHttpKernel(),
-            $this->getFooRequest(true, false),
-            HttpKernelInterface::MASTER_REQUEST
-        );
+        $request = $this->getFooRequest(true, false);
+        $event   = $this->getGetResponseEvent($request);
 
         $response = new Response();
         $event->setResponse($response);
@@ -63,14 +57,25 @@ class KernelEventListenerTest extends AbstractTest
      * @dataProvider configProvider
      * @param array $config
      */
+    public function testKernelRequestListenerDoesNothingWithEmptyRoute(array $config)
+    {
+        $event = $this->getGetResponseEvent(new Request());
+
+        $listener = $this->getKernelEventListener($config);
+
+        $returnValue = $listener->onKernelRequest($event);
+
+        $this->assertFalse($returnValue);
+    }
+
+    /**
+     * @dataProvider configProvider
+     * @param array $config
+     */
     public function testTrailingSlashRedirect(array $config)
     {
-        $event = new GetResponseForExceptionEvent(
-            new TestHttpKernel(),
-            $this->getFooRequest(),
-            HttpKernelInterface::MASTER_REQUEST,
-            new NotFoundHttpException('')
-        );
+        $request = $this->getFooRequest();
+        $event   = $this->getGetResponseForExceptionEvent($request);
 
         $listener = $this->getKernelEventListener($config);
 
@@ -91,12 +96,9 @@ class KernelEventListenerTest extends AbstractTest
     {
         $config['trailing_slash'] = true;
 
-        $event = new GetResponseForExceptionEvent(
-            new TestHttpKernel(),
-            $this->getBazRequest(true, false),
-            HttpKernelInterface::MASTER_REQUEST,
-            new NotFoundHttpException('')
-        );
+        $request = $this->getBazRequest(true, false);
+
+        $event = $this->getGetResponseForExceptionEvent($request);
 
         $listener = $this->getKernelEventListener($config);
 
@@ -113,35 +115,10 @@ class KernelEventListenerTest extends AbstractTest
      * @dataProvider configProvider
      * @param array $config
      */
-    public function testKernelRequestListenerDoesNothingWithEmptyRoute(array $config)
-    {
-        $event = new GetResponseEvent(
-            new TestHttpKernel(),
-            new Request(),
-            HttpKernelInterface::MASTER_REQUEST
-        );
-
-        $listener = $this->getKernelEventListener($config);
-
-        $returnValue = $listener->onKernelRequest($event);
-
-        $this->assertFalse($returnValue);
-    }
-
-    /**
-     * @dataProvider configProvider
-     * @param array $config
-     */
     public function testNonMatchingAlternativeRouteReturnsFalse(array $config)
     {
         $request = Request::create('https://example.org/bar/');
-
-        $event = new GetResponseForExceptionEvent(
-            new TestHttpKernel(),
-            $request,
-            HttpKernelInterface::MASTER_REQUEST,
-            new NotFoundHttpException('')
-        );
+        $event   = $this->getGetResponseForExceptionEvent($request);
 
         $listener = $this->getKernelEventListener($config);
 
@@ -157,13 +134,7 @@ class KernelEventListenerTest extends AbstractTest
     public function testKernelRequestListenerDoesNothingForNonExistentRoute(array $config)
     {
         $request = Request::create('https://example.org/bar');
-
-        $event = new GetResponseForExceptionEvent(
-            new TestHttpKernel(),
-            $request,
-            HttpKernelInterface::MASTER_REQUEST,
-            new NotFoundHttpException('')
-        );
+        $event   = $this->getGetResponseForExceptionEvent($request);
 
         $listener = $this->getKernelEventListener($config);
 
@@ -178,15 +149,10 @@ class KernelEventListenerTest extends AbstractTest
      */
     public function testRouteWithUrlParametersAndTrailingSlashRedirectsToCorrectRoute(array $config)
     {
-        $request  = Request::create('https://example.org/foo/bar/');
-        $listener = $this->getKernelEventListener($config);
+        $request = Request::create('https://example.org/foo/bar/');
+        $event   = $this->getGetResponseForExceptionEvent($request);
 
-        $event = new GetResponseForExceptionEvent(
-            new TestHttpKernel(),
-            $request,
-            HttpKernelInterface::MASTER_REQUEST,
-            new NotFoundHttpException('')
-        );
+        $listener = $this->getKernelEventListener($config);
 
         $listener->onKernelException($event);
 
@@ -195,6 +161,37 @@ class KernelEventListenerTest extends AbstractTest
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertEquals('https://example.org/foo/bar', $response->getTargetUrl());
+    }
+
+    /**
+     * @param Request $request
+     * @return GetResponseForExceptionEvent
+     */
+    protected function getGetResponseForExceptionEvent(Request $request)
+    {
+        $event = new GetResponseForExceptionEvent(
+            new TestHttpKernel(),
+            $request,
+            HttpKernelInterface::MASTER_REQUEST,
+            new NotFoundHttpException('')
+        );
+
+        return $event;
+    }
+
+    /**
+     * @param Request $request
+     * @return GetResponseEvent
+     */
+    protected function getGetResponseEvent(Request $request)
+    {
+        $event = new GetResponseEvent(
+            new TestHttpKernel(),
+            $request,
+            HttpKernelInterface::MASTER_REQUEST
+        );
+
+        return $event;
     }
 
     /**
