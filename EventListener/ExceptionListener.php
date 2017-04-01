@@ -11,14 +11,12 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-class KernelEventListener
+class ExceptionListener
 {
     const CONTROLLER_PATTERN = '~^/app(?:_.+)*\.php~';
 
     /** @var RouterInterface */
     protected $router;
-    /** @var CanonicalUrlGenerator */
-    protected $urlGenerator;
     /** @var bool */
     protected $redirect;
     /** @var int */
@@ -28,57 +26,16 @@ class KernelEventListener
 
     /**
      * KernelEventListener constructor.
-     * @param RouterInterface       $router
-     * @param CanonicalUrlGenerator $urlGenerator
-     * @param array                 $config
+     * @param RouterInterface $router
+     * @param array           $config
      */
-    public function __construct(RouterInterface $router, CanonicalUrlGenerator $urlGenerator, array $config = [])
+    public function __construct(RouterInterface $router, array $config = [])
     {
-        $this->router       = $router;
-        $this->urlGenerator = $urlGenerator;
+        $this->router = $router;
 
         $this->redirect      = $config['redirect'];
         $this->redirectCode  = $config['redirect_code'];
         $this->trailingSlash = $config['trailing_slash'];
-    }
-
-    /**
-     * Listener for the 'kernel.request' event.
-     *
-     * @param GetResponseEvent $event
-     *
-     * @return bool
-     */
-    public function onKernelRequest(GetResponseEvent $event)
-    {
-        $request = $event->getRequest();
-
-        $route = $request->attributes->get('_route');
-
-        if (!$route) {
-            return false;
-        }
-
-        $params = $request->attributes->get('_route_params');
-
-        // Get full request URL without query string.
-        $requestUrl = $request->getSchemeAndHttpHost() . $request->getRequestUri();
-        $requestUrl = urldecode(strtok($requestUrl, '?'));
-
-        $redirectUrl = $this->urlGenerator->generate($route, $params);
-        // Compare without query string
-        $canonicalUrl = urldecode(strtok($redirectUrl, '?'));
-
-        if ($redirectUrl && strcasecmp($requestUrl, $canonicalUrl) !== 0) {
-            if ($this->redirect) {
-                $response = new RedirectResponse($redirectUrl, $this->redirectCode);
-                $event->setResponse($response);
-
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**

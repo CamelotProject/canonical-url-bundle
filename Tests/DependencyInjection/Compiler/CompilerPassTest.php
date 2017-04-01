@@ -3,7 +3,7 @@
 namespace Palmtree\CanonicalUrlBundle\Tests\DependencyInjection\Compiler;
 
 use Palmtree\CanonicalUrlBundle\DependencyInjection\Compiler\CompilerPass;
-use Palmtree\CanonicalUrlBundle\EventListener\KernelEventListener;
+use Palmtree\CanonicalUrlBundle\EventListener\ExceptionListener;
 use Palmtree\CanonicalUrlBundle\Service\CanonicalUrlGenerator;
 use Palmtree\CanonicalUrlBundle\Tests\AbstractTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -24,7 +24,7 @@ class CompilerPassTest extends AbstractTest
 
         $definitions = [
             'palmtree_canonical_url.url_generator'         => new Definition(CanonicalUrlGenerator::class),
-            'palmtree_canonical_url.kernel_event_listener' => new Definition(KernelEventListener::class),
+            'palmtree_canonical_url.kernel_event_listener' => new Definition(ExceptionListener::class),
         ];
 
         $container->addDefinitions($definitions);

@@ -2,11 +2,15 @@ services:
     palmtree_canonical_url.url_generator:
         class: Palmtree\CanonicalUrlBundle\Service\CanonicalUrlGenerator
         arguments: ['@router']
-    palmtree_canonical_url.kernel_event_listener:
-        class: Palmtree\CanonicalUrlBundle\EventListener\KernelEventListener
-        arguments: ['@router', '@palmtree_canonical_url.url_generator']
+    palmtree_canonical_url.request_listener:
+        class: Palmtree\CanonicalUrlBundle\EventListener\RequestListener
+        arguments: ['@palmtree_canonical_url.url_generator']
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+    palmtree_canonical_url.exception_listener:
+        class: Palmtree\CanonicalUrlBundle\EventListener\ExceptionListener
+        arguments: ['@router']
+        tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
     palmtree_canonical_url.twig_extension:
         class: Palmtree\CanonicalUrlBundle\Twig\Extension\CanonicalLinkExtension
