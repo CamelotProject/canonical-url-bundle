@@ -2,9 +2,7 @@
 
 namespace Palmtree\CanonicalUrlBundle\EventListener;
 
-use Palmtree\CanonicalUrlBundle\Service\CanonicalUrlGenerator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;

@@ -5,11 +5,6 @@ namespace Palmtree\CanonicalUrlBundle\EventListener;
 use Palmtree\CanonicalUrlBundle\Service\CanonicalUrlGenerator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
 
 class RequestListener
 {
@@ -29,8 +24,8 @@ class RequestListener
     {
         $this->urlGenerator = $urlGenerator;
 
-        $this->redirect      = $config['redirect'];
-        $this->redirectCode  = $config['redirect_code'];
+        $this->redirect     = $config['redirect'];
+        $this->redirectCode = $config['redirect_code'];
     }
 
     /**
