@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class CanonicalLinkExtension extends \Twig_Extension
 {
     /** @var CanonicalUrlGenerator */
-    protected $canonicalUrlGenerator;
+    private $canonicalUrlGenerator;
     /** @var RequestStack */
-    protected $requestStack;
+    private $requestStack;
 
     /**
      * CanonicalLinkExtension constructor.
