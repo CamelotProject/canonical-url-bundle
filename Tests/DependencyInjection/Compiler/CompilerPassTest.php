@@ -20,7 +20,7 @@ class CompilerPassTest extends AbstractTest
         $container = new ContainerBuilder();
         $container->setParameter('kernel.environment', 'test');
 
-        $container->setParameter('palmtree.canonical_url.config', $config);
+        $container->setParameter('palmtree_canonical_url.config', $config);
 
         $definitions = [
             'palmtree_canonical_url.url_generator'         => new Definition(CanonicalUrlGenerator::class),

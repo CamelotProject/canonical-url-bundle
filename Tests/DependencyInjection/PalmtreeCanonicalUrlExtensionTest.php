@@ -20,7 +20,7 @@ class PalmtreeCanonicalUrlExtensionTest extends AbstractTest
 
         $extension->load([$config], $container);
 
-        $this->assertSame($config, $container->getParameter('palmtree.canonical_url.config'));
+        $this->assertSame($config, $container->getParameter('palmtree_canonical_url.config'));
     }
 
     /**
