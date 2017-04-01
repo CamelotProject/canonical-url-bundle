@@ -173,6 +173,31 @@ class KernelEventListenerTest extends AbstractTest
     }
 
     /**
+     * @dataProvider configProvider
+     * @param array $config
+     */
+    public function testRouteWithUrlParametersAndTrailingSlashRedirectsToCorrectRoute(array $config)
+    {
+        $request  = Request::create('https://example.org/foo/bar/');
+        $listener = $this->getKernelEventListener($config);
+
+        $event = new GetResponseForExceptionEvent(
+            new TestHttpKernel(),
+            $request,
+            HttpKernelInterface::MASTER_REQUEST,
+            new NotFoundHttpException('')
+        );
+
+        $listener->onKernelException($event);
+
+        /** @var RedirectResponse $response */
+        $response = $event->getResponse();
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertEquals('https://example.org/foo/bar', $response->getTargetUrl());
+    }
+
+    /**
      * @param array $config
      * @return KernelEventListener
      */

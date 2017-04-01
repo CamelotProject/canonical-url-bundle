@@ -43,6 +43,7 @@ abstract class AbstractTest extends TestCase
     {
         $routeCollection = new RouteCollection();
         $routeCollection->add('foo', new Route('/foo'));
+        $routeCollection->add('foo/{noop}', new Route('/foo/{noop}'));
         $routeCollection->add('baz', new Route('/baz/'));
         $routeCollection->setHost('example.org');
 
