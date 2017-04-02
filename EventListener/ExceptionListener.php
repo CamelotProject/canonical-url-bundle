@@ -11,7 +11,7 @@ use Symfony\Component\Routing\RouterInterface;
 
 class ExceptionListener
 {
-    const CONTROLLER_PATTERN = '~^/app(?:_.+)*\.php~';
+    const CONTROLLER_PATTERN = '~^/app(?:_.+)*\.php$~';
 
     /** @var RouterInterface */
     protected $router;
