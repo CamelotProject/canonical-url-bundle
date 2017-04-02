@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 class RequestListener
 {
     /** @var CanonicalUrlGenerator */
-    protected $urlGenerator;
+    protected $canonicalUrlGenerator;
     /** @var bool */
     protected $redirect;
     /** @var int */
@@ -22,7 +22,7 @@ class RequestListener
      */
     public function __construct(CanonicalUrlGenerator $urlGenerator, array $config = [])
     {
-        $this->urlGenerator = $urlGenerator;
+        $this->canonicalUrlGenerator = $urlGenerator;
 
         $this->redirect     = $config['redirect'];
         $this->redirectCode = $config['redirect_code'];
@@ -51,7 +51,7 @@ class RequestListener
         $requestUrl = $request->getSchemeAndHttpHost() . $request->getRequestUri();
         $requestUrl = urldecode(strtok($requestUrl, '?'));
 
-        $redirectUrl = $this->urlGenerator->generate($route, $params);
+        $redirectUrl = $this->canonicalUrlGenerator->generate($route, $params);
         // Compare without query string
         $canonicalUrl = urldecode(strtok($redirectUrl, '?'));
 
