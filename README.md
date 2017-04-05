@@ -1,4 +1,4 @@
-# CanonicalUrlBundle
+# Canonical Url Bundle
 
 [![License](http://img.shields.io/packagist/l/palmtree/canonical-url-bundle.svg)](LICENSE)
 [![Travis](https://img.shields.io/travis/palmtreephp/canonical-url-bundle.svg)](https://travis-ci.org/palmtreephp/canonical-url-bundle)
@@ -21,7 +21,7 @@ https://www.example.org/about-us/
 ```
 
 When a user requests the resource with any of the above URLs, `CanonicalUrlBundle` will build a canonical URL based on a predefined site URL and will
-perform an HTTP redirect to it if the requested URL does not match.
+perform an HTTP redirect to it if the request URL does not match.
 
 The bundle can also add a `<link rel="canonical">` tag to your twig templates, see the [Usage](#usage) section for how.
 
