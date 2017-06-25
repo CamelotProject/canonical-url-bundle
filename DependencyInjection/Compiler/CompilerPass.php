@@ -18,7 +18,10 @@ class CompilerPass implements CompilerPassInterface
         $definition = $container->getDefinition('palmtree_canonical_url.url_generator');
         $definition->addArgument($bundleConfig);
 
-        $definition = $container->getDefinition('palmtree_canonical_url.kernel_event_listener');
+        $definition = $container->getDefinition('palmtree_canonical_url.request_listener');
+        $definition->addArgument($bundleConfig);
+
+        $definition = $container->getDefinition('palmtree_canonical_url.exception_listener');
         $definition->addArgument($bundleConfig);
     }
 }
