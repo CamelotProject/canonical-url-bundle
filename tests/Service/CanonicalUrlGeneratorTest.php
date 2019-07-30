@@ -2,7 +2,7 @@
 
 namespace Palmtree\CanonicalUrlBundle\Tests\Service;
 
-use Palmtree\CanonicalUrlBundle\Service\CanonicalUrlGenerator;
+use Palmtree\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
 use Palmtree\CanonicalUrlBundle\Tests\AbstractTest;
 
 class CanonicalUrlGeneratorTest extends AbstractTest

@@ -2,7 +2,7 @@
 
 namespace Palmtree\CanonicalUrlBundle\Twig\Extension;
 
-use Palmtree\CanonicalUrlBundle\Service\CanonicalUrlGenerator;
+use Palmtree\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class CanonicalLinkExtension extends \Twig_Extension

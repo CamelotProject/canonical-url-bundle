@@ -19,7 +19,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Palmtree\\CanonicalUrlBundle\\": ""
+            "Palmtree\\CanonicalUrlBundle\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Palmtree\\CanonicalUrlBundle\\Tests\\": "tests"
         }
     },
     "require-dev": {

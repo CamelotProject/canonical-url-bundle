@@ -3,7 +3,7 @@
 namespace Palmtree\CanonicalUrlBundle\Tests\EventListener;
 
 use Palmtree\CanonicalUrlBundle\EventListener\RequestListener;
-use Palmtree\CanonicalUrlBundle\Service\CanonicalUrlGenerator;
+use Palmtree\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
 use Palmtree\CanonicalUrlBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

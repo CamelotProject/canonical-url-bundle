@@ -2,7 +2,7 @@
 
 namespace Palmtree\CanonicalUrlBundle\EventListener;
 
-use Palmtree\CanonicalUrlBundle\Service\CanonicalUrlGenerator;
+use Palmtree\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 

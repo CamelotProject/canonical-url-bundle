@@ -5,7 +5,7 @@ namespace Palmtree\CanonicalUrlBundle\Tests\DependencyInjection\Compiler;
 use Palmtree\CanonicalUrlBundle\DependencyInjection\Compiler\CompilerPass;
 use Palmtree\CanonicalUrlBundle\EventListener\ExceptionListener;
 use Palmtree\CanonicalUrlBundle\EventListener\RequestListener;
-use Palmtree\CanonicalUrlBundle\Service\CanonicalUrlGenerator;
+use Palmtree\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
 use Palmtree\CanonicalUrlBundle\Tests\AbstractTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;

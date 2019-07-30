@@ -1,6 +1,6 @@
 services:
     palmtree_canonical_url.url_generator:
-        class: Palmtree\CanonicalUrlBundle\Service\CanonicalUrlGenerator
+        class: Palmtree\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator
         arguments: ['@router']
     palmtree_canonical_url.request_listener:
         class: Palmtree\CanonicalUrlBundle\EventListener\RequestListener

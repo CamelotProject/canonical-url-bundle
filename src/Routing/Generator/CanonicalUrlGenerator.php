@@ -1,6 +1,6 @@
 <?php
 
-namespace Palmtree\CanonicalUrlBundle\Service;
+namespace Palmtree\CanonicalUrlBundle\Routing\Generator;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
