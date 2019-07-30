@@ -1,29 +1,25 @@
 <?php
 
-namespace Palmtree\CanonicalUrlBundle\DependencyInjection;
+declare(strict_types=1);
+
+namespace Camelot\CanonicalUrlBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * @inheritDoc
-     */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode    = $treeBuilder->root('palmtree_canonical_url');
+        $treeBuilder = new TreeBuilder('camelot_canonical_url');
+        $rootNode = $treeBuilder->getRootNode();
 
-        // @formatter:off
         $rootNode
             ->children()
                 ->scalarNode('site_url')
                     ->isRequired()->cannotBeEmpty()
                     ->validate()
-                        ->ifTrue(function ($value) {
-                            return !is_string($value);
-                        })
+                        ->ifTrue(function ($value) { return !\is_string($value); })
                         ->thenInvalid('site_url must be a string')
                     ->end()
                 ->end()
@@ -32,7 +28,6 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('trailing_slash')->defaultFalse()->treatNullLike(false)->end()
             ->end()
         ;
-        // @formatter:on
 
         return $treeBuilder;
     }

@@ -1,14 +1,16 @@
 <?php
 
-namespace Palmtree\CanonicalUrlBundle\Tests\EventListener;
+declare(strict_types=1);
 
-use Palmtree\CanonicalUrlBundle\EventListener\RequestListener;
-use Palmtree\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
-use Palmtree\CanonicalUrlBundle\Tests\AbstractTest;
+namespace Camelot\CanonicalUrlBundle\Tests\EventListener;
+
+use Camelot\CanonicalUrlBundle\EventListener\RequestListener;
+use Camelot\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
+use Camelot\CanonicalUrlBundle\Tests\AbstractTest;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Tests\TestHttpKernel;
 
@@ -16,12 +18,11 @@ class RequestListenerTest extends AbstractTest
 {
     /**
      * @dataProvider configProvider
-     * @param array $config
      */
-    public function testCanonicalRedirect(array $config)
+    public function testCanonicalRedirect(array $config): void
     {
         $request = $this->getFooRequest(false);
-        $event   = $this->getGetResponseEvent($request);
+        $event = $this->getRequestEvent($request);
 
         $response = new Response();
         $event->setResponse($response);
@@ -29,18 +30,17 @@ class RequestListenerTest extends AbstractTest
         $listener = $this->getListener($config);
         $listener->onKernelRequest($event);
 
-        $this->assertNotSame($response, $event->getResponse());
-        $this->assertInstanceOf(RedirectResponse::class, $event->getResponse());
+        static::assertNotSame($response, $event->getResponse());
+        static::assertInstanceOf(RedirectResponse::class, $event->getResponse());
     }
 
     /**
      * @dataProvider configProvider
-     * @param array $config
      */
-    public function testNoRedirectWhenUrlIsCanonical(array $config)
+    public function testNoRedirectWhenUrlIsCanonical(array $config): void
     {
         $request = $this->getFooRequest(true, false);
-        $event   = $this->getGetResponseEvent($request);
+        $event = $this->getRequestEvent($request);
 
         $response = new Response();
         $event->setResponse($response);
@@ -48,31 +48,26 @@ class RequestListenerTest extends AbstractTest
         $listener = $this->getListener($config);
         $listener->onKernelRequest($event);
 
-        $this->assertSame($response, $event->getResponse());
+        static::assertSame($response, $event->getResponse());
     }
 
     /**
      * @dataProvider configProvider
-     * @param array $config
      */
-    public function testKernelRequestListenerDoesNothingWithEmptyRoute(array $config)
+    public function testKernelRequestListenerDoesNothingWithEmptyRoute(array $config): void
     {
-        $event = $this->getGetResponseEvent(new Request());
+        $event = $this->getRequestEvent(new Request());
 
         $listener = $this->getListener($config);
 
         $returnValue = $listener->onKernelRequest($event);
 
-        $this->assertFalse($returnValue);
+        static::assertFalse($returnValue);
     }
 
-    /**
-     * @param Request $request
-     * @return GetResponseEvent
-     */
-    protected function getGetResponseEvent(Request $request)
+    protected function getRequestEvent(Request $request): RequestEvent
     {
-        $event = new GetResponseEvent(
+        $event = new RequestEvent(
             new TestHttpKernel(),
             $request,
             HttpKernelInterface::MASTER_REQUEST
@@ -82,7 +77,6 @@ class RequestListenerTest extends AbstractTest
     }
 
     /**
-     * @param array $config
      * @return RequestListener
      */
     protected function getListener(array $config)
@@ -90,7 +84,7 @@ class RequestListenerTest extends AbstractTest
         $router = $this->getRouter();
 
         $urlGenerator = new CanonicalUrlGenerator($router, $config);
-        $listener     = new RequestListener($urlGenerator, $config);
+        $listener = new RequestListener($urlGenerator, $config);
 
         return $listener;
     }

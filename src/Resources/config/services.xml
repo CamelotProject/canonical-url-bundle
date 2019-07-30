@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults autowire="true"
+                  autoconfigure="true"
+                  public="false"
+        />
+
+        <!--  -->
+        <service id="Camelot\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator">
+            <argument id="@router" />
+        </service>
+        <service id="Camelot\CanonicalUrlBundle\EventListener\RequestListener">
+            <argument id="@camelot_canonical_url.url_generator" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
+        </service>
+        <service id="Camelot\CanonicalUrlBundle\EventListener\ExceptionListener">
+            <argument id="@router" />
+        </service>
+        <service id="Camelot\CanonicalUrlBundle\Twig\Extension\CanonicalLinkExtension">
+            <argument id="@camelot_canonical_url.url_generator" />
+            <argument id="@request_stack" />
+            <tag name="twig.extension" />
+        </service>
+    </services>
+</container>
+

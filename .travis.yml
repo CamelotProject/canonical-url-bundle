@@ -1,28 +1,37 @@
 language: php
 
-sudo: false
-
 matrix:
+  include:
+    - php: 7.2
+      env: COMPOSER_FLAGS="--prefer-lowest"
+    - php: 7.3
+    - php: 7.4snapshot
+      env:
+        - PHPUNIT_FLAGS="--coverage-text"
+        - COVERAGE=true
+    - php: nightly
   fast_finish: true
   allow_failures:
-    - php: hhvm
-  include:
-    - php: 7.1
-      env: PHPSNIFF=1 PHPLINT=1 PHPUNIT=1
-    - php: 7.0
-      env: PHPLINT=1 PHPUNIT=1 SYMFONY_VERSION="2.8.*"
-    - php: 5.6
-      env: PHPLINT=1 PHPUNIT=1 SYMFONY_VERSION="2.7.*"
+    - php: nightly
+
+before_script:
+  - |
+      if [[ "$COVERAGE" = true ]] ; then
+          echo > $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/conf.d/xdebug.ini
+          git clone --single-branch --branch=v1.0.6 --depth=1 https://github.com/krakjoe/pcov
+          cd pcov
+          phpize
+          ./configure
+          make clean install
+          echo "extension=pcov.so" > $HOME/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/conf.d/pcov.ini
+          cd $TRAVIS_BUILD_DIR
+      fi
+  - travis_retry composer self-update
+  - travis_retry composer update --no-interaction --prefer-dist $COMPOSER_FLAGS
+
+script:
+  - vendor/bin/phpunit $PHPUNIT_FLAGS
 
 cache:
   directories:
-    - $HOME/.composer/cache/files
-
-before_script:
-  - composer install --no-interaction --prefer-dist
-  - if [ "$SYMFONY_VERSION" != "" ]; then composer require --dev --no-update symfony/symfony:"$SYMFONY_VERSION"; fi
-
-script:
-  - if [[ "$PHPLINT" == "1" ]]; then find -L .  -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l; fi
-  - if [[ "$PHPUNIT" == "1" ]]; then vendor/bin/phpunit -v; fi
-  - if [[ "$PHPSNIFF" == "1" ]]; then find -L .  -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 vendor/bin/phpcs --standard="PSR2" -v; fi
+    - $COMPOSER_CACHE_DIR

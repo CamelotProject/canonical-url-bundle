@@ -1,45 +1,45 @@
 <?php
 
-namespace Palmtree\CanonicalUrlBundle\Tests\Service;
+declare(strict_types=1);
 
-use Palmtree\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
-use Palmtree\CanonicalUrlBundle\Tests\AbstractTest;
+namespace Camelot\CanonicalUrlBundle\Tests\Service;
+
+use Camelot\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
+use Camelot\CanonicalUrlBundle\Tests\AbstractTest;
 
 class CanonicalUrlGeneratorTest extends AbstractTest
 {
     /**
      * @dataProvider configProvider
-     * @param array $config
      */
-    public function testGenerateUrl(array $config)
+    public function testGenerateUrl(array $config): void
     {
         $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
 
         $url = $urlGenerator->generate('foo');
 
-        $this->assertEquals('https://example.org/foo', $url);
+        static::assertEquals('https://example.org/foo', $url);
     }
 
     /**
      * @dataProvider configProvider
-     * @param array $config
      */
-    public function testGenerateUrlWithStringParams(array $config)
+    public function testGenerateUrlWithStringParams(array $config): void
     {
         $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
 
         $url = $urlGenerator->generate('foo', 'key1=val1&key2=val2');
 
-        $this->assertEquals('https://example.org/foo?key1=val1&key2=val2', $url);
+        static::assertEquals('https://example.org/foo?key1=val1&key2=val2', $url);
     }
 
     /**
      * @dataProvider configProvider
-     * @expectedException \Symfony\Component\Routing\Exception\RouteNotFoundException
-     * @param array $config
      */
-    public function testNonExistentRouteThrowsException(array $config)
+    public function testNonExistentRouteThrowsException(array $config): void
     {
+        $this->expectException(\Symfony\Component\Routing\Exception\RouteNotFoundException::class);
+
         $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
 
         $urlGenerator->generate('bar');
@@ -47,14 +47,13 @@ class CanonicalUrlGeneratorTest extends AbstractTest
 
     /**
      * @dataProvider configProvider
-     * @param array $config
      */
-    public function testEmptyRouteReturnsEmptyString(array $config)
+    public function testEmptyRouteReturnsEmptyString(array $config): void
     {
         $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
 
         $url = $urlGenerator->generate('');
 
-        $this->assertSame('', $url);
+        static::assertSame('', $url);
     }
 }

@@ -1,5 +1,5 @@
 {
-    "name": "palmtree/canonical-url-bundle",
+    "name": "camelot/canonical-url-bundle",
     "type": "symfony-bundle",
     "description": "Canonical URL Symfony bundle",
     "license": "MIT",
@@ -7,29 +7,49 @@
         {
             "name": "Andy Palmer",
             "email": "andy@andypalmer.me"
+        },
+        {
+            "name": "Gawain Lynch",
+            "email": "gawain.lynch@gmail.com"
         }
     ],
     "require": {
-        "php": ">=5.6",
-        "symfony/dependency-injection": "~2.7|~3.0",
-        "symfony/config": "~2.7|~3.0",
-        "symfony/routing": "~2.7|~3.0",
-        "symfony/http-kernel": "~2.7|~3.0",
-        "twig/twig": "~1.28|~2.0"
+        "php": "^7.2",
+        "symfony/dependency-injection": "^4.3",
+        "symfony/config": "^4.3",
+        "symfony/routing": "^4.3",
+        "symfony/http-kernel": "^4.3",
+        "twig/twig": "^2.0|^3.0"
     },
     "autoload": {
         "psr-4": {
-            "Palmtree\\CanonicalUrlBundle\\": "src"
+            "Camelot\\CanonicalUrlBundle\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Palmtree\\CanonicalUrlBundle\\Tests\\": "tests"
+            "Camelot\\CanonicalUrlBundle\\Tests\\": "tests"
         }
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "~2.8",
-        "phpunit/phpunit": "~5.7|~6.0",
-        "symfony/yaml": "~3.2"
+        "camelot/coding-style": "^2.0",
+        "friendsofphp/php-cs-fixer": "^2.15",
+        "phpunit/phpunit": "^8.4",
+        "psalm/plugin-phpunit": "^0.6",
+        "symfony/browser-kit": "^4.3",
+        "symfony/phpunit-bridge": "^4.3.4",
+        "symfony/yaml": "^4.3",
+        "vimeo/psalm": "^3.5"
+    },
+    "scripts": {
+        "lint": "vendor/bin/php-cs-fixer fix --show-progress=dots -v",
+        "static": "vendor/bin/psalm --find-dead-code",
+        "test": "vendor/bin/phpunit",
+        "coverage": "vendor/bin/phpunit --coverage-text",
+        "suite": [
+            "@lint",
+            "@static",
+            "@coverage"
+        ]
     }
 }

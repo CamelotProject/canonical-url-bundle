@@ -1,10 +1,12 @@
 <?php
 
-namespace Palmtree\CanonicalUrlBundle\EventListener;
+declare(strict_types=1);
 
-use Palmtree\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
+namespace Camelot\CanonicalUrlBundle\EventListener;
+
+use Camelot\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class RequestListener
 {
@@ -17,25 +19,19 @@ class RequestListener
 
     /**
      * KernelEventListener constructor.
-     * @param CanonicalUrlGenerator $urlGenerator
-     * @param array                 $config
      */
     public function __construct(CanonicalUrlGenerator $urlGenerator, array $config = [])
     {
         $this->canonicalUrlGenerator = $urlGenerator;
 
-        $this->redirect     = $config['redirect'];
+        $this->redirect = $config['redirect'];
         $this->redirectCode = $config['redirect_code'];
     }
 
     /**
      * Listener for the 'kernel.request' event.
-     *
-     * @param GetResponseEvent $event
-     *
-     * @return bool
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event): bool
     {
         $request = $event->getRequest();
 
@@ -55,13 +51,11 @@ class RequestListener
         // Compare without query string
         $canonicalUrl = urldecode(strtok($redirectUrl, '?'));
 
-        if ($redirectUrl && strcasecmp($requestUrl, $canonicalUrl) !== 0) {
-            if ($this->redirect) {
-                $response = new RedirectResponse($redirectUrl, $this->redirectCode);
-                $event->setResponse($response);
+        if ($redirectUrl && strcasecmp($requestUrl, $canonicalUrl) !== 0 && $this->redirect) {
+            $response = new RedirectResponse($redirectUrl, $this->redirectCode);
+            $event->setResponse($response);
 
-                return true;
-            }
+            return true;
         }
 
         return false;

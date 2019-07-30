@@ -1,71 +1,55 @@
 <?php
 
-namespace Palmtree\CanonicalUrlBundle\Twig\Extension;
+declare(strict_types=1);
 
-use Palmtree\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
+namespace Camelot\CanonicalUrlBundle\Twig\Extension;
+
+use Camelot\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Twig\Environment;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
+use function func_num_args;
 
-class CanonicalLinkExtension extends \Twig_Extension
+class CanonicalLinkExtension extends AbstractExtension
 {
     /** @var CanonicalUrlGenerator */
     private $canonicalUrlGenerator;
     /** @var RequestStack */
     private $requestStack;
 
-    /**
-     * CanonicalLinkExtension constructor.
-     * @param CanonicalUrlGenerator $canonicalUrlGenerator
-     * @param RequestStack          $requestStack
-     */
     public function __construct(CanonicalUrlGenerator $canonicalUrlGenerator, RequestStack $requestStack)
     {
         $this->canonicalUrlGenerator = $canonicalUrlGenerator;
-        $this->requestStack          = $requestStack;
+        $this->requestStack = $requestStack;
     }
 
-    /**
-     * @return \Twig_Function[]
-     */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
-            new \Twig_SimpleFunction('palmtree_canonical_url', [$this, 'generateUrl']),
-            new \Twig_SimpleFunction('palmtree_canonical_link_tag', [$this, 'renderLinkTag'], [
-                'needs_environment' => true,
-                'is_safe'           => ['html'],
-            ]),
+            new TwigFunction('camelot_canonical_url', [$this, 'generateUrl']),
+            new TwigFunction('camelot_canonical_link_tag', [$this, 'renderLinkTag'], ['needs_environment' => true, 'is_safe' => ['html']]),
         ];
     }
 
-    /**
-     * @param \Twig_Environment $environment
-     * @param string            $href
-     *
-     * @return string
-     */
-    public function renderLinkTag(\Twig_Environment $environment, $href = null)
+    public function renderLinkTag(Environment $environment, string $href = null): string
     {
-        $output = $environment->render('@PalmtreeCanonicalUrl/canonical_link_tag.html.twig', [
-            'href' => $href,
-        ]);
+        $output = $environment->render('@CamelotCanonicalUrl/canonical_link_tag.html.twig', ['href' => $href]);
 
         return $output;
     }
 
     /**
-     * @param string       $route
      * @param string|array $parameters
      *
      * @see CanonicalUrlGenerator::generate() For parameter descriptions.
-     *
-     * @return string
      */
-    public function generateUrl($route = null, $parameters = [])
+    public function generateUrl(string $route = null, $parameters = []): string
     {
         if (func_num_args() === 0) {
             $request = $this->requestStack->getCurrentRequest();
 
-            $route      = $request->attributes->get('_route');
+            $route = $request->attributes->get('_route');
             $parameters = $request->attributes->get('_route_params');
         }
 

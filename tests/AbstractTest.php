@@ -1,6 +1,8 @@
 <?php
 
-namespace Palmtree\CanonicalUrlBundle\Tests;
+declare(strict_types=1);
+
+namespace Camelot\CanonicalUrlBundle\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -12,34 +14,43 @@ use Symfony\Component\Routing\Router;
 
 abstract class AbstractTest extends TestCase
 {
-    /**
-     * @param RouteCollection|null $routeCollection
-     *
-     * @return Router
-     */
-    protected function getRouter($routeCollection = null)
+    public function configProvider(): array
+    {
+        return [
+            'config' => [
+                [
+                    'site_url' => 'https://example.org',
+                    'redirect' => true,
+                    'redirect_code' => 302,
+                    'trailing_slash' => false,
+                ],
+            ],
+        ];
+    }
+
+    protected function getRouter(?RouteCollection $routeCollection = null): Router
     {
         if (!$routeCollection) {
             $routeCollection = $this->getFooRouteCollection();
         }
 
         $loader = $this->createMock(LoaderInterface::class);
-        $loader->method('load')->willReturn($routeCollection);
-
-        /** @var LoaderInterface $loader */
+        $loader
+            ->expects($this->any())
+            ->method('load')
+            ->willReturn($routeCollection)
+        ;
         $context = new RequestContext();
         $context->setScheme('https')->setHost('example.org');
 
+        /** @var LoaderInterface $loader */
         $router = new Router($loader, '');
         $router->setContext($context);
 
         return $router;
     }
 
-    /**
-     * @return RouteCollection
-     */
-    protected function getFooRouteCollection()
+    protected function getFooRouteCollection(): RouteCollection
     {
         $routeCollection = new RouteCollection();
         $routeCollection->add('foo', new Route('/foo'));
@@ -50,15 +61,10 @@ abstract class AbstractTest extends TestCase
         return $routeCollection;
     }
 
-    /**
-     * @param bool $secure
-     * @param bool $trailingSlash
-     * @return Request
-     */
-    protected function getMockRequest($path, $secure = true, $trailingSlash = true)
+    protected function getMockRequest(string $path, bool $secure = true, bool $trailingSlash = true): Request
     {
         $scheme = ($secure) ? 'https' : 'http';
-        $uri    = "$scheme://example.org/$path";
+        $uri = "$scheme://example.org/$path";
 
         if ($trailingSlash) {
             $uri .= '/';
@@ -70,40 +76,13 @@ abstract class AbstractTest extends TestCase
         return $request;
     }
 
-    /**
-     * @param bool $secure
-     * @param bool $trailingSlash
-     * @return Request
-     */
-    protected function getFooRequest($secure = true, $trailingSlash = true)
+    protected function getFooRequest(bool $secure = true, bool $trailingSlash = true): Request
     {
         return $this->getMockRequest('foo', $secure, $trailingSlash);
     }
 
-    /**
-     * @param bool $secure
-     * @param bool $trailingSlash
-     * @return Request
-     */
-    protected function getBazRequest($secure = true, $trailingSlash = true)
+    protected function getBazRequest(bool $secure = true, bool $trailingSlash = true): Request
     {
         return $this->getMockRequest('baz', $secure, $trailingSlash);
-    }
-
-    /**
-     * @return array
-     */
-    public function configProvider()
-    {
-        return [
-            'config' => [
-                [
-                    'site_url'       => 'https://example.org',
-                    'redirect'       => true,
-                    'redirect_code'  => 302,
-                    'trailing_slash' => false,
-                ]
-            ]
-        ];
     }
 }

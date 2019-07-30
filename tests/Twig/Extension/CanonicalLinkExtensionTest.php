@@ -1,76 +1,65 @@
 <?php
 
-namespace Palmtree\CanonicalUrlBundle\Tests\Twig\Extension;
+declare(strict_types=1);
 
-use Palmtree\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
-use Palmtree\CanonicalUrlBundle\Tests\AbstractTest;
-use Palmtree\CanonicalUrlBundle\Twig\Extension\CanonicalLinkExtension;
+namespace Camelot\CanonicalUrlBundle\Tests\Twig\Extension;
+
+use Camelot\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
+use Camelot\CanonicalUrlBundle\Tests\AbstractTest;
+use Camelot\CanonicalUrlBundle\Twig\Extension\CanonicalLinkExtension;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 class CanonicalLinkExtensionTest extends AbstractTest
 {
     /**
      * @dataProvider configProvider
-     * @param array $config
      */
-    public function testGenerateUrlMethod(array $config)
+    public function testGenerateUrlMethod(array $config): void
     {
         $extension = $this->getExtension($config);
-
         $url = $extension->generateUrl('foo');
 
-        $this->assertEquals('https://example.org/foo', $url);
+        static::assertEquals('https://example.org/foo', $url);
     }
 
     /**
      * @dataProvider configProvider
-     * @param array $config
      */
-    public function testGenerateUrlMethodWithNoRouteDefaultsToCurrentRequest(array $config)
+    public function testGenerateUrlMethodWithNoRouteDefaultsToCurrentRequest(array $config): void
     {
         $extension = $this->getExtension($config);
-
         $url = $extension->generateUrl();
 
-        $this->assertEquals('https://example.org/foo', $url);
+        static::assertEquals('https://example.org/foo', $url);
     }
 
     /**
      * @dataProvider configProvider
-     * @param array $config
      */
-    public function testRenderLinkTag(array $config)
+    public function testRenderLinkTag(array $config): void
     {
         $extension = $this->getExtension($config);
-
-        $loader = new \Twig_Loader_Filesystem();
-        $loader->setPaths(__DIR__ . '/../../../Resources/views', 'PalmtreeCanonicalUrl');
-
-        $twig = new \Twig_Environment($loader, [
-            'debug'      => true,
-            'cache'      => false,
+        $loader = new FilesystemLoader();
+        $loader->setPaths(__DIR__ . '/../../../src/Resources/views', 'CamelotCanonicalUrl');
+        $twig = new Environment($loader, [
+            'debug' => true,
+            'cache' => false,
             'autoescape' => 'html',
         ]);
-
         $twig->addExtension($extension);
-
         $html = $extension->renderLinkTag($twig, 'https://example.org');
         $html = trim($html);
 
-        $this->assertEquals('<link rel="canonical" href="https://example.org">', $html);
+        static::assertEquals('<link rel="canonical" href="https://example.org">', $html);
     }
 
-    /**
-     * @param $config
-     * @return CanonicalLinkExtension
-     */
-    protected function getExtension($config)
+    protected function getExtension(array $config): CanonicalLinkExtension
     {
         $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
         $requestStack = new RequestStack();
-
         $requestStack->push($this->getFooRequest());
-
         $extension = new CanonicalLinkExtension($urlGenerator, $requestStack);
 
         return $extension;

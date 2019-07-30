@@ -1,9 +1,12 @@
 <?php
 
-namespace Palmtree\CanonicalUrlBundle\Tests\DependencyInjection;
+declare(strict_types=1);
 
-use Palmtree\CanonicalUrlBundle\DependencyInjection\Configuration;
-use Palmtree\CanonicalUrlBundle\Tests\AbstractTest;
+namespace Camelot\CanonicalUrlBundle\Tests\DependencyInjection;
+
+use Camelot\CanonicalUrlBundle\DependencyInjection\Configuration;
+use Camelot\CanonicalUrlBundle\Tests\AbstractTest;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 
 class ConfigurationTest extends AbstractTest
@@ -12,77 +15,55 @@ class ConfigurationTest extends AbstractTest
      * Some basic tests to make sure the configuration is correctly processed in
      * the standard case.
      */
-    public function testProcessSimpleCase()
+    public function testProcessSimpleCase(): void
     {
         $configs = [
             [
-                'site_url'       => 'https://example.org',
-                'redirect'       => true,
-                'redirect_code'  => 302,
+                'site_url' => 'https://example.org',
+                'redirect' => true,
+                'redirect_code' => 302,
                 'trailing_slash' => true,
             ],
             [
-                'trailing_slash' => false
-            ]
+                'trailing_slash' => false,
+            ],
         ];
 
         $config = $this->process($configs);
 
-        $this->assertArrayHasKey('site_url', $config);
-        $this->assertTrue($config['redirect']);
-        $this->assertFalse($config['trailing_slash']);
+        static::assertArrayHasKey('site_url', $config);
+        static::assertTrue($config['redirect']);
+        static::assertFalse($config['trailing_slash']);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
-    public function testInvalidSiteUrl()
+    public function testInvalidSiteUrl(): void
     {
-        $configs = [
-            [
-                'site_url' => false,
-            ]
-        ];
+        $this->expectException(InvalidConfigurationException::class);
 
+        $configs = [['site_url' => false]];
         $this->process($configs);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
-    public function testInvalidRedirectCode()
+    public function testInvalidRedirectCode(): void
     {
-        $configs = [
-            [
-                'redirect_code' => 404,
-            ]
-        ];
+        $this->expectException(InvalidConfigurationException::class);
 
+        $configs = [['redirect_code' => 404]];
         $this->process($configs);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
-    public function testInvalidRedirect()
+    public function testInvalidRedirect(): void
     {
-        $configs = [
-            [
-                'redirect' => 9,
-            ]
-        ];
+        $this->expectException(InvalidConfigurationException::class);
 
+        $configs = [['redirect' => 9]];
         $this->process($configs);
     }
 
     /**
      * Processes an array of configurations and returns a compiled version.
-     *
-     * @param array $configs An array of raw configurations
-     *
-     * @return array A normalized array
      */
-    protected function process($configs)
+    protected function process(array $configs): array
     {
         $processor = new Processor();
 
