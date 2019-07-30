@@ -13,10 +13,8 @@ use function func_num_args;
 
 final class CanonicalLinkExtension extends AbstractExtension
 {
-    /** @var CanonicalUrlGenerator */
-    private $canonicalUrlGenerator;
-    /** @var RequestStack */
-    private $requestStack;
+    private CanonicalUrlGenerator $canonicalUrlGenerator;
+    private RequestStack $requestStack;
 
     public function __construct(CanonicalUrlGenerator $canonicalUrlGenerator, RequestStack $requestStack)
     {

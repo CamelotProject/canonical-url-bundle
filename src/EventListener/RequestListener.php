@@ -10,12 +10,9 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 final class RequestListener
 {
-    /** @var CanonicalUrlGenerator */
-    protected $canonicalUrlGenerator;
-    /** @var bool */
-    protected $redirect;
-    /** @var int */
-    protected $redirectCode;
+    private CanonicalUrlGenerator $canonicalUrlGenerator;
+    private bool $redirect;
+    private int $redirectCode;
 
     /**
      * KernelEventListener constructor.
