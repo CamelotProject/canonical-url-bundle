@@ -76,10 +76,7 @@ class RequestListenerTest extends AbstractTest
         return $event;
     }
 
-    /**
-     * @return RequestListener
-     */
-    protected function getListener(array $config)
+    protected function getListener(array $config): RequestListener
     {
         $router = $this->getRouter();
 

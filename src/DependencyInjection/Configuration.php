@@ -6,20 +6,20 @@ namespace Camelot\CanonicalUrlBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use function is_string;
 
-class Configuration implements ConfigurationInterface
+final class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('camelot_canonical_url');
-        $rootNode = $treeBuilder->getRootNode();
 
-        $rootNode
+        $treeBuilder->getRootNode()
             ->children()
                 ->scalarNode('site_url')
                     ->isRequired()->cannotBeEmpty()
                     ->validate()
-                        ->ifTrue(function ($value) { return !\is_string($value); })
+                        ->ifTrue(function ($value) { return !is_string($value); })
                         ->thenInvalid('site_url must be a string')
                     ->end()
                 ->end()

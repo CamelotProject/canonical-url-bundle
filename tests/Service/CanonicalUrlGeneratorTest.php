@@ -6,6 +6,7 @@ namespace Camelot\CanonicalUrlBundle\Tests\Service;
 
 use Camelot\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
 use Camelot\CanonicalUrlBundle\Tests\AbstractTest;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class CanonicalUrlGeneratorTest extends AbstractTest
 {
@@ -38,7 +39,7 @@ class CanonicalUrlGeneratorTest extends AbstractTest
      */
     public function testNonExistentRouteThrowsException(array $config): void
     {
-        $this->expectException(\Symfony\Component\Routing\Exception\RouteNotFoundException::class);
+        $this->expectException(RouteNotFoundException::class);
 
         $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
 
@@ -48,8 +49,10 @@ class CanonicalUrlGeneratorTest extends AbstractTest
     /**
      * @dataProvider configProvider
      */
-    public function testEmptyRouteReturnsEmptyString(array $config): void
+    public function testEmptyRouteThrowsException(array $config): void
     {
+        $this->expectException(RouteNotFoundException::class);
+
         $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
 
         $url = $urlGenerator->generate('');

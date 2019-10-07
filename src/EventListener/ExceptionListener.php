@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-class ExceptionListener
+final class ExceptionListener
 {
     public const CONTROLLER_PATTERN = '~^/app(?:_.+)*\.php~';
 
@@ -27,10 +27,9 @@ class ExceptionListener
     public function __construct(RouterInterface $router, array $config = [])
     {
         $this->router = $router;
-
-        $this->redirect = $config['redirect'];
-        $this->redirectCode = $config['redirect_code'];
-        $this->trailingSlash = $config['trailing_slash'];
+        $this->redirect = (bool) $config['redirect'];
+        $this->redirectCode = (int) $config['redirect_code'];
+        $this->trailingSlash = (bool) $config['trailing_slash'];
     }
 
     /**
@@ -38,15 +37,12 @@ class ExceptionListener
      */
     public function onKernelException(ExceptionEvent $event): bool
     {
-        $exception = $event->getException();
-        if (!$exception instanceof NotFoundHttpException) {
+        if (!$event->getException() instanceof NotFoundHttpException) {
             return false;
         }
-
         // We're about to throw a 404 error, try to resolve it
         $request = $event->getRequest();
         $uri = strtok($request->getRequestUri(), '?');
-        // See if there's a matching route without a trailing slash
         $match = $this->getAlternativeRoute($uri);
 
         if ($match === null || !$this->redirect) {
@@ -68,7 +64,10 @@ class ExceptionListener
 
     }
 
-    protected function getAlternativeRoute(string $uri): ?array
+    /**
+     * See if there's a matching route without a trailing slash.
+     */
+    private function getAlternativeRoute(string $uri): ?array
     {
         $alternativeUri = rtrim($uri, '/');
 
@@ -83,9 +82,7 @@ class ExceptionListener
         $alternativeUri = preg_replace(static::CONTROLLER_PATTERN, '', $alternativeUri);
 
         try {
-            $match = $this->router->match($alternativeUri);
-
-            return $match;
+            return $this->router->match($alternativeUri);
         } catch (ResourceNotFoundException $e) {
             return null;
         }

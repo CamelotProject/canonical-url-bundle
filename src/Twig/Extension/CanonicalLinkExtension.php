@@ -11,7 +11,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use function func_num_args;
 
-class CanonicalLinkExtension extends AbstractExtension
+final class CanonicalLinkExtension extends AbstractExtension
 {
     /** @var CanonicalUrlGenerator */
     private $canonicalUrlGenerator;
@@ -34,16 +34,9 @@ class CanonicalLinkExtension extends AbstractExtension
 
     public function renderLinkTag(Environment $environment, string $href = null): string
     {
-        $output = $environment->render('@CamelotCanonicalUrl/canonical_link_tag.html.twig', ['href' => $href]);
-
-        return $output;
+        return $environment->render('@CamelotCanonicalUrl/canonical_link_tag.html.twig', ['href' => $href]);
     }
 
-    /**
-     * @param string|array $parameters
-     *
-     * @see CanonicalUrlGenerator::generate() For parameter descriptions.
-     */
     public function generateUrl(string $route = null, $parameters = []): string
     {
         if (func_num_args() === 0) {

@@ -25,9 +25,9 @@ class CompilerPassTest extends AbstractTest
         $container->setParameter('camelot_canonical_url.config', $config);
 
         $definitions = [
-            'camelot_canonical_url.url_generator' => new Definition(CanonicalUrlGenerator::class),
-            'camelot_canonical_url.exception_listener' => new Definition(ExceptionListener::class),
-            'camelot_canonical_url.request_listener' => new Definition(RequestListener::class),
+            CanonicalUrlGenerator::class => new Definition(CanonicalUrlGenerator::class),
+            ExceptionListener::class => new Definition(ExceptionListener::class),
+            RequestListener::class => new Definition(RequestListener::class),
         ];
 
         $container->addDefinitions($definitions);
