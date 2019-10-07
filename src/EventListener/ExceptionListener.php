@@ -15,14 +15,10 @@ final class ExceptionListener
 {
     public const CONTROLLER_PATTERN = '~^/app(?:_.+)*\.php~';
 
-    /** @var RouterInterface */
-    protected $router;
-    /** @var bool */
-    protected $redirect;
-    /** @var int */
-    protected $redirectCode;
-    /** @var bool */
-    protected $trailingSlash;
+    private RouterInterface $router;
+    private bool $redirect;
+    private int $redirectCode;
+    private bool $trailingSlash;
 
     public function __construct(RouterInterface $router, array $config = [])
     {
@@ -61,7 +57,6 @@ final class ExceptionListener
         $event->setResponse($response);
 
         return true;
-
     }
 
     /**

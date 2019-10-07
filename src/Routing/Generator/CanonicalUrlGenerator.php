@@ -10,12 +10,9 @@ use function is_string;
 
 final class CanonicalUrlGenerator
 {
-    /** @var RouterInterface */
-    protected $router;
-    /** @var string */
-    protected $siteUrl;
-    /** @var bool */
-    protected $trailingSlash;
+    private RouterInterface $router;
+    private string $siteUrl;
+    private bool $trailingSlash;
 
     public function __construct(RouterInterface $router, array $config = [])
     {
