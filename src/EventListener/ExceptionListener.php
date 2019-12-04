@@ -33,7 +33,7 @@ final class ExceptionListener
      */
     public function onKernelException(ExceptionEvent $event): bool
     {
-        if (!$event->getException() instanceof NotFoundHttpException) {
+        if (!$event->getThrowable() instanceof NotFoundHttpException) {
             return false;
         }
         // We're about to throw a 404 error, try to resolve it

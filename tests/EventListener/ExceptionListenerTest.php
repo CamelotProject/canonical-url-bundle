@@ -10,8 +10,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\Tests\TestHttpKernel;
 
 class ExceptionListenerTest extends AbstractTest
 {
@@ -90,7 +90,7 @@ class ExceptionListenerTest extends AbstractTest
     protected function getExceptionEvent(Request $request): ExceptionEvent
     {
         $event = new ExceptionEvent(
-            new TestHttpKernel(),
+            $this-> createMock(HttpKernel::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST,
             new NotFoundHttpException('')
