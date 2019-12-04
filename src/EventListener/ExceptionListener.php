@@ -10,6 +10,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
+use function method_exists;
 
 final class ExceptionListener
 {
@@ -37,7 +38,8 @@ final class ExceptionListener
      */
     public function onKernelException(ExceptionEvent $event): bool
     {
-        if (!$event->getException() instanceof NotFoundHttpException) {
+        $exception = method_exists($event, 'getException') ? $event->getException() : $event->getThrowable();
+        if (!$exception instanceof NotFoundHttpException) {
             return false;
         }
         // We're about to throw a 404 error, try to resolve it

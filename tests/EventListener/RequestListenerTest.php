@@ -11,8 +11,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\Tests\TestHttpKernel;
 
 class RequestListenerTest extends AbstractTest
 {
@@ -68,7 +68,7 @@ class RequestListenerTest extends AbstractTest
     protected function getRequestEvent(Request $request): RequestEvent
     {
         $event = new RequestEvent(
-            new TestHttpKernel(),
+            $this-> createMock(HttpKernel::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
