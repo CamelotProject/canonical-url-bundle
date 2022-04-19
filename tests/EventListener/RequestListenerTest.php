@@ -20,8 +20,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  */
 final class RequestListenerTest extends AbstractTest
 {
-    /** @dataProvider configProvider */
-    public function testCanonicalRedirect(array $config): void
+    public function testCanonicalRedirect(): void
     {
         $request = $this->getFooRequest(false);
         $event = $this->getRequestEvent($request);
@@ -29,15 +28,13 @@ final class RequestListenerTest extends AbstractTest
         $response = new Response();
         $event->setResponse($response);
 
-        $listener = $this->getListener($config);
-        $listener->onKernelRequest($event);
+        $this->getListener()->onKernelRequest($event);
 
         static::assertNotSame($response, $event->getResponse());
         static::assertInstanceOf(RedirectResponse::class, $event->getResponse());
     }
 
-    /** @dataProvider configProvider */
-    public function testNoRedirectWhenUrlIsCanonical(array $config): void
+    public function testNoRedirectWhenUrlIsCanonical(): void
     {
         $request = $this->getFooRequest(true, false);
         $event = $this->getRequestEvent($request);
@@ -45,20 +42,15 @@ final class RequestListenerTest extends AbstractTest
         $response = new Response();
         $event->setResponse($response);
 
-        $listener = $this->getListener($config);
-        $listener->onKernelRequest($event);
+        $this->getListener()->onKernelRequest($event);
 
         static::assertSame($response, $event->getResponse());
     }
 
-    /** @dataProvider configProvider */
-    public function testKernelRequestListenerDoesNothingWithEmptyRoute(array $config): void
+    public function testKernelRequestListenerDoesNothingWithEmptyRoute(): void
     {
         $event = $this->getRequestEvent(new Request());
-
-        $listener = $this->getListener($config);
-
-        $returnValue = $listener->onKernelRequest($event);
+        $returnValue = $this->getListener()->onKernelRequest($event);
 
         static::assertFalse($returnValue);
     }
@@ -68,16 +60,14 @@ final class RequestListenerTest extends AbstractTest
         return new RequestEvent(
             $this->createMock(HttpKernel::class),
             $request,
-            HttpKernelInterface::MASTER_REQUEST
+            HttpKernelInterface::MAIN_REQUEST
         );
     }
 
-    protected function getListener(array $config): RequestListener
+    protected function getListener(): RequestListener
     {
-        $router = $this->getRouter();
+        $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), 'https://example.org');
 
-        $urlGenerator = new CanonicalUrlGenerator($router, $config);
-
-        return new RequestListener($urlGenerator, $config);
+        return new RequestListener($urlGenerator, true, 302);
     }
 }

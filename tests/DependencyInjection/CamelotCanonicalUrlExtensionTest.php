@@ -14,6 +14,20 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 final class CamelotCanonicalUrlExtensionTest extends AbstractTest
 {
+    public function configProvider(): array
+    {
+        return [
+            'config' => [
+                [
+                    'site_url' => 'https://example.org',
+                    'redirect' => true,
+                    'redirect_code' => 302,
+                    'trailing_slash' => false,
+                ],
+            ],
+        ];
+    }
+
     /** @dataProvider configProvider */
     public function testSetConfigurationParameter(array $config): void
     {

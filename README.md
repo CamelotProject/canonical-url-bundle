@@ -44,7 +44,7 @@ Open a command console, enter your project directory and execute the
 following command to download the latest stable version of this bundle:
 
 ```console
-$ composer require camelot/canonical-url
+$ composer require camelot/canonical-url-bundle
 ```
 
 This command requires you to have Composer installed globally, as explained
@@ -66,7 +66,7 @@ return [
 
 ### Step 3: Configure the Bundle
 
-Add your configuration for the bundle to `app/config/config.yml`:
+Add your configuration for the bundle to `config/packages/camelot_canonical_url.yml`:
 
 ```yaml
 camelot_canonical_url:
@@ -76,18 +76,27 @@ camelot_canonical_url:
     trailing_slash: false                 # Set to true if your routes and canonical URLs contain a trailing slash
 ```
 
+Set the Symfony Router default URI in `config/packages/routing.yaml` 
+
+```yaml
+framework:
+    router:
+        # ...
+        default_uri: 'https://example.org'
+```
+
 ## Usage
 
-To add a `<link rel="canonical">` tag to your pages include the following code in the `<head>` of a twig tempalte:
+To add a `<link rel="canonical">` tag to your pages include the following code in the `<head>` of a twig template:
 
 ```twig
 {{ camelot_canonical_link_tag() }}
 ```
 
-The href attribute will default to the canonical URL for the current request, but this can be overidden:
+The href attribute will default to the canonical URL for the current request, but this can be overridden:
 
 ```twig
-{{ camelot_canonical_link_tag('http://example.org/my-custom-link') }}
+{{ camelot_canonical_link_tag('https://example.org/my-custom-link') }}
 ```
 
 ## License

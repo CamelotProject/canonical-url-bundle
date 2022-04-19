@@ -18,28 +18,25 @@ use function dirname;
  */
 final class CanonicalLinkExtensionTest extends AbstractTest
 {
-    /** @dataProvider configProvider */
-    public function testGenerateUrlMethod(array $config): void
+    public function testGenerateUrlMethod(): void
     {
-        $extension = $this->getExtension($config);
+        $extension = $this->getExtension();
         $url = $extension->generateUrl('foo');
 
         static::assertSame('https://example.org/foo', $url);
     }
 
-    /** @dataProvider configProvider */
-    public function testGenerateUrlMethodWithNoRouteDefaultsToCurrentRequest(array $config): void
+    public function testGenerateUrlMethodWithNoRouteDefaultsToCurrentRequest(): void
     {
-        $extension = $this->getExtension($config);
+        $extension = $this->getExtension();
         $url = $extension->generateUrl();
 
         static::assertSame('https://example.org/foo', $url);
     }
 
-    /** @dataProvider configProvider */
-    public function testRenderLinkTag(array $config): void
+    public function testRenderLinkTag(): void
     {
-        $extension = $this->getExtension($config);
+        $extension = $this->getExtension();
         $loader = new FilesystemLoader();
         $loader->setPaths(dirname(__DIR__, 3) . '/src/Resources/views', 'CamelotCanonicalUrl');
         $twig = new Environment($loader, [
@@ -54,9 +51,9 @@ final class CanonicalLinkExtensionTest extends AbstractTest
         static::assertSame('<link rel="canonical" href="https://example.org">', $html);
     }
 
-    protected function getExtension(array $config): CanonicalLinkExtension
+    protected function getExtension(): CanonicalLinkExtension
     {
-        $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
+        $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), 'https://example.org');
         $requestStack = new RequestStack();
         $requestStack->push($this->getFooRequest());
 

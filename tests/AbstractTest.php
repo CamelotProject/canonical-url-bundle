@@ -14,20 +14,6 @@ use Symfony\Component\Routing\Router;
 
 abstract class AbstractTest extends TestCase
 {
-    public function configProvider(): array
-    {
-        return [
-            'config' => [
-                [
-                    'site_url' => 'https://example.org',
-                    'redirect' => true,
-                    'redirect_code' => 302,
-                    'trailing_slash' => false,
-                ],
-            ],
-        ];
-    }
-
     protected function getRouter(?RouteCollection $routeCollection = null): Router
     {
         if (!$routeCollection) {

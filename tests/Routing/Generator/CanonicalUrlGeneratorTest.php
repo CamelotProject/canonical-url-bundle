@@ -14,45 +14,38 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
  */
 final class CanonicalUrlGeneratorTest extends AbstractTest
 {
-    /** @dataProvider configProvider */
-    public function testGenerateUrl(array $config): void
+    public function testGenerateUrl(): void
     {
-        $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
-
-        $url = $urlGenerator->generate('foo');
+        $url = $this->getUrlGenerator()->generate('foo');
 
         static::assertSame('https://example.org/foo', $url);
     }
 
-    /** @dataProvider configProvider */
-    public function testGenerateUrlWithStringParams(array $config): void
+    public function testGenerateUrlWithStringParams(): void
     {
-        $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
-
-        $url = $urlGenerator->generate('foo', 'key1=val1&key2=val2');
+        $url = $this->getUrlGenerator()->generate('foo', 'key1=val1&key2=val2');
 
         static::assertSame('https://example.org/foo?key1=val1&key2=val2', $url);
     }
 
-    /** @dataProvider configProvider */
-    public function testNonExistentRouteThrowsException(array $config): void
+    public function testNonExistentRouteThrowsException(): void
     {
         $this->expectException(RouteNotFoundException::class);
 
-        $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
-
-        $urlGenerator->generate('bar');
+        $this->getUrlGenerator()->generate('bar');
     }
 
-    /** @dataProvider configProvider */
-    public function testEmptyRouteThrowsException(array $config): void
+    public function testEmptyRouteThrowsException(): void
     {
         $this->expectException(RouteNotFoundException::class);
 
-        $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
-
-        $url = $urlGenerator->generate('');
+        $url = $this->getUrlGenerator()->generate('');
 
         static::assertSame('', $url);
+    }
+
+    private function getUrlGenerator(): CanonicalUrlGenerator
+    {
+        return new CanonicalUrlGenerator($this->getRouter(), 'https://example.org');
     }
 }

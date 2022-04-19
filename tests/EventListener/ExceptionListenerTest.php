@@ -19,62 +19,51 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  */
 final class ExceptionListenerTest extends AbstractTest
 {
-    /** @dataProvider configProvider */
-    public function testTrailingSlashRedirect(array $config): void
+    public function testTrailingSlashRedirect(): void
     {
         $request = $this->getFooRequest();
         $event = $this->getExceptionEvent($request);
-        $listener = $this->getListener($config);
-        $listener->onKernelException($event);
+        $this->getListener()->onKernelException($event);
         $response = $event->getResponse();
 
         static::assertInstanceOf(RedirectResponse::class, $response);
         static::assertSame('https://example.org/foo', $response->getTargetUrl());
     }
 
-    /** @dataProvider configProvider */
-    public function testNoTrailingSlashRedirect(array $config): void
+    public function testNoTrailingSlashRedirect(): void
     {
-        $config['trailing_slash'] = true;
         $request = $this->getBazRequest(true, false);
         $event = $this->getExceptionEvent($request);
-        $listener = $this->getListener($config);
-        $listener->onKernelException($event);
+        (new ExceptionListener($this->getRouter(), true, 302, true))->onKernelException($event);
         $response = $event->getResponse();
 
         static::assertInstanceOf(RedirectResponse::class, $response);
         static::assertSame('https://example.org/baz/', $response->getTargetUrl());
     }
 
-    /** @dataProvider configProvider */
-    public function testNonMatchingAlternativeRouteReturnsFalse(array $config): void
+    public function testNonMatchingAlternativeRouteReturnsFalse(): void
     {
         $request = Request::create('https://example.org/bar/');
         $event = $this->getExceptionEvent($request);
-        $listener = $this->getListener($config);
-        $returnValue = $listener->onKernelException($event);
+        $returnValue = $this->getListener()->onKernelException($event);
 
         static::assertFalse($returnValue);
     }
 
-    /** @dataProvider configProvider */
-    public function testKernelRequestListenerDoesNothingForNonExistentRoute(array $config): void
+    public function testKernelRequestListenerDoesNothingForNonExistentRoute(): void
     {
         $request = Request::create('https://example.org/bar');
         $event = $this->getExceptionEvent($request);
-        $listener = $this->getListener($config);
-        $returnValue = $listener->onKernelException($event);
+        $returnValue = $this->getListener()->onKernelException($event);
 
         static::assertFalse($returnValue);
     }
 
-    /** @dataProvider configProvider */
-    public function testRouteWithUrlParametersAndTrailingSlashRedirectsToCorrectRoute(array $config): void
+    public function testRouteWithUrlParametersAndTrailingSlashRedirectsToCorrectRoute(): void
     {
         $request = Request::create('https://example.org/foo/bar/');
         $event = $this->getExceptionEvent($request);
-        $listener = $this->getListener($config);
-        $listener->onKernelException($event);
+        $this->getListener()->onKernelException($event);
         $response = $event->getResponse();
 
         static::assertInstanceOf(RedirectResponse::class, $response);
@@ -86,15 +75,13 @@ final class ExceptionListenerTest extends AbstractTest
         return new ExceptionEvent(
             $this->createMock(HttpKernel::class),
             $request,
-            HttpKernelInterface::MASTER_REQUEST,
+            HttpKernelInterface::MAIN_REQUEST,
             new NotFoundHttpException('')
         );
     }
 
-    protected function getListener(array $config): ExceptionListener
+    protected function getListener(): ExceptionListener
     {
-        $router = $this->getRouter();
-
-        return new ExceptionListener($router, $config);
+        return new ExceptionListener($this->getRouter(), true, 302, false);
     }
 }
