@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Camelot\CanonicalUrlBundle\Tests\Twig\Extension;
 
-use Camelot\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
-use Camelot\CanonicalUrlBundle\Tests\AbstractTest;
+use Camelot\CanonicalUrlBundle\Tests\TestTrait;
 use Camelot\CanonicalUrlBundle\Twig\Extension\CanonicalLinkExtension;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use function dirname;
@@ -16,8 +17,10 @@ use function dirname;
  * @internal
  * @covers \Camelot\CanonicalUrlBundle\Twig\Extension\CanonicalLinkExtension
  */
-final class CanonicalLinkExtensionTest extends AbstractTest
+final class CanonicalLinkExtensionTest extends KernelTestCase
 {
+    use TestTrait;
+
     public function testGenerateUrlMethod(): void
     {
         $extension = $this->getExtension();

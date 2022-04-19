@@ -5,15 +5,18 @@ declare(strict_types=1);
 namespace Camelot\CanonicalUrlBundle\Tests\DependencyInjection;
 
 use Camelot\CanonicalUrlBundle\DependencyInjection\CamelotCanonicalUrlExtension;
-use Camelot\CanonicalUrlBundle\Tests\AbstractTest;
+use Camelot\CanonicalUrlBundle\Tests\TestTrait;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @internal
  * @covers \Camelot\CanonicalUrlBundle\DependencyInjection\CamelotCanonicalUrlExtension
  */
-final class CamelotCanonicalUrlExtensionTest extends AbstractTest
+final class CamelotCanonicalUrlExtensionTest extends TestCase
 {
+    use TestTrait;
+
     public function configProvider(): array
     {
         return [

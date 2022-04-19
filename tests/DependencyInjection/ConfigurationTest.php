@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Camelot\CanonicalUrlBundle\Tests\DependencyInjection;
 
 use Camelot\CanonicalUrlBundle\DependencyInjection\Configuration;
-use Camelot\CanonicalUrlBundle\Tests\AbstractTest;
+use Camelot\CanonicalUrlBundle\Tests\TestTrait;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 
@@ -13,8 +14,10 @@ use Symfony\Component\Config\Definition\Processor;
  * @internal
  * @covers \Camelot\CanonicalUrlBundle\DependencyInjection\Configuration
  */
-final class ConfigurationTest extends AbstractTest
+final class ConfigurationTest extends TestCase
 {
+    use TestTrait;
+
     /**
      * Some basic tests to make sure the configuration is correctly processed in
      * the standard case.

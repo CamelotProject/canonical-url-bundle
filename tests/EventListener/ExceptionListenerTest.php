@@ -5,20 +5,24 @@ declare(strict_types=1);
 namespace Camelot\CanonicalUrlBundle\Tests\EventListener;
 
 use Camelot\CanonicalUrlBundle\EventListener\ExceptionListener;
-use Camelot\CanonicalUrlBundle\Tests\AbstractTest;
+use Camelot\CanonicalUrlBundle\Tests\TestTrait;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @internal
  * @covers \Camelot\CanonicalUrlBundle\EventListener\ExceptionListener
  */
-final class ExceptionListenerTest extends AbstractTest
+final class ExceptionListenerTest extends KernelTestCase
 {
+    use TestTrait;
+
     public function testTrailingSlashRedirect(): void
     {
         $request = $this->getFooRequest();
@@ -34,7 +38,8 @@ final class ExceptionListenerTest extends AbstractTest
     {
         $request = $this->getBazRequest(true, false);
         $event = $this->getExceptionEvent($request);
-        (new ExceptionListener($this->getRouter(), true, 302, true))->onKernelException($event);
+        $router = static::getContainer()->get(RouterInterface::class);
+        (new ExceptionListener($router, true, 302, true))->onKernelException($event);
         $response = $event->getResponse();
 
         static::assertInstanceOf(RedirectResponse::class, $response);
@@ -82,6 +87,8 @@ final class ExceptionListenerTest extends AbstractTest
 
     protected function getListener(): ExceptionListener
     {
-        return new ExceptionListener($this->getRouter(), true, 302, false);
+        $router = static::getContainer()->get(RouterInterface::class);
+
+        return new ExceptionListener($router, true, 302, false);
     }
 }

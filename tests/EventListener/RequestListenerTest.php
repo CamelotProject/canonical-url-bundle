@@ -5,21 +5,24 @@ declare(strict_types=1);
 namespace Camelot\CanonicalUrlBundle\Tests\EventListener;
 
 use Camelot\CanonicalUrlBundle\EventListener\RequestListener;
-use Camelot\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
-use Camelot\CanonicalUrlBundle\Tests\AbstractTest;
+use Camelot\CanonicalUrlBundle\Tests\TestTrait;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * @internal
  * @covers \Camelot\CanonicalUrlBundle\EventListener\RequestListener
  */
-final class RequestListenerTest extends AbstractTest
+final class RequestListenerTest extends KernelTestCase
 {
+    use TestTrait;
+
     public function testCanonicalRedirect(): void
     {
         $request = $this->getFooRequest(false);
