@@ -47,7 +47,7 @@ final class RequestListenerTest extends KernelTestCase
 
         $this->getListener()->onKernelRequest($event);
 
-        static::assertSame($response, $event->getResponse());
+        static::assertSame(200, $event->getResponse()->getStatusCode());
     }
 
     public function testKernelRequestListenerDoesNothingWithEmptyRoute(): void
@@ -69,7 +69,7 @@ final class RequestListenerTest extends KernelTestCase
 
     protected function getListener(): RequestListener
     {
-        $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), 'https://example.org');
+        $urlGenerator = static::getContainer()->get(UrlGeneratorInterface::class);
 
         return new RequestListener($urlGenerator, true, 302);
     }

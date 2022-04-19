@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Camelot\CanonicalUrlBundle\EventListener;
 
-use Camelot\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class RequestListener
 {
-    private CanonicalUrlGenerator $canonicalUrlGenerator;
+    private UrlGeneratorInterface $urlGenerator;
     private bool $redirect;
     private int $redirectCode;
 
-    public function __construct(CanonicalUrlGenerator $canonicalUrlGenerator, bool $redirect, int $redirectCode)
+    public function __construct(UrlGeneratorInterface $urlGenerator, bool $redirect, int $redirectCode)
     {
-        $this->canonicalUrlGenerator = $canonicalUrlGenerator;
+        $this->urlGenerator = $urlGenerator;
         $this->redirect = $redirect;
         $this->redirectCode = $redirectCode;
     }
@@ -26,19 +26,18 @@ final class RequestListener
     {
         $request = $event->getRequest();
         $route = $request->attributes->get('_route');
+        $params = $request->attributes->get('_route_params', []);
+
         if (!$route) {
             return false;
         }
 
-        $params = $request->attributes->get('_route_params');
         // Get full request URL without query string.
-        $requestUrl = $request->getSchemeAndHttpHost() . $request->getRequestUri();
-        $requestUrl = urldecode(strtok($requestUrl, '?'));
-        $redirectUrl = $this->canonicalUrlGenerator->generate($route, $params);
-        $canonicalUrl = urldecode(strtok($redirectUrl, '?'));
+        $requestUrl = $request->getSchemeAndHttpHost() . $request->getBaseUrl() . $request->getPathInfo();
+        $canonicalUrl = $this->urlGenerator->generate($route, $params, UrlGeneratorInterface::ABSOLUTE_URL);
 
-        if ($redirectUrl && strcasecmp($requestUrl, $canonicalUrl) !== 0 && $this->redirect) {
-            $response = new RedirectResponse($redirectUrl, $this->redirectCode);
+        if ($requestUrl !== $canonicalUrl && $this->redirect) {
+            $response = new RedirectResponse($canonicalUrl, $this->redirectCode);
             $event->setResponse($response);
 
             return true;

@@ -56,7 +56,7 @@ final class CanonicalLinkExtensionTest extends KernelTestCase
 
     protected function getExtension(): CanonicalLinkExtension
     {
-        $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), 'https://example.org');
+        $urlGenerator = static::getContainer()->get(UrlGeneratorInterface::class);
         $requestStack = new RequestStack();
         $requestStack->push($this->getFooRequest());
 
