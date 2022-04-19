@@ -22,7 +22,6 @@ final class CamelotCanonicalUrlExtensionTest extends TestCase
         return [
             'config' => [
                 [
-                    'site_url' => 'https://example.org',
                     'redirect' => true,
                     'redirect_code' => 302,
                     'trailing_slash' => false,

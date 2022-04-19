@@ -6,7 +6,6 @@ namespace Camelot\CanonicalUrlBundle\DependencyInjection;
 
 use Camelot\CanonicalUrlBundle\EventListener\ExceptionListener;
 use Camelot\CanonicalUrlBundle\EventListener\RequestListener;
-use Camelot\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -24,10 +23,6 @@ final class CamelotCanonicalUrlExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('camelot_canonical_url.config', $config);
-
-        $container->getDefinition(CanonicalUrlGenerator::class)
-            ->setArgument('$siteUrl', $config['site_url'])
-        ;
 
         $container->getDefinition(RequestListener::class)
             ->setArgument('$redirect', $config['redirect'])

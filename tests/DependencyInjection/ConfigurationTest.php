@@ -26,7 +26,6 @@ final class ConfigurationTest extends TestCase
     {
         $configs = [
             [
-                'site_url' => 'https://example.org',
                 'redirect' => true,
                 'redirect_code' => 302,
                 'trailing_slash' => true,
@@ -38,17 +37,8 @@ final class ConfigurationTest extends TestCase
 
         $config = $this->process($configs);
 
-        static::assertArrayHasKey('site_url', $config);
         static::assertTrue($config['redirect']);
         static::assertFalse($config['trailing_slash']);
-    }
-
-    public function testInvalidSiteUrl(): void
-    {
-        $this->expectException(InvalidConfigurationException::class);
-
-        $configs = [['site_url' => false]];
-        $this->process($configs);
     }
 
     public function testInvalidRedirectCode(): void
