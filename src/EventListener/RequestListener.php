@@ -14,15 +14,11 @@ final class RequestListener
     private bool $redirect;
     private int $redirectCode;
 
-    /** KernelEventListener constructor. */
-    public function __construct(CanonicalUrlGenerator $urlGenerator, array $config = [])
+    public function __construct(CanonicalUrlGenerator $canonicalUrlGenerator, bool $redirect, int $redirectCode)
     {
-        $this->canonicalUrlGenerator = $urlGenerator;
-
-        $this->redirect = $config['redirect'];
-        $this->redirectCode = $config['redirect_code'];
-        $this->redirect = (bool) $config['redirect'];
-        $this->redirectCode = (int) $config['redirect_code'];
+        $this->canonicalUrlGenerator = $canonicalUrlGenerator;
+        $this->redirect = $redirect;
+        $this->redirectCode = $redirectCode;
     }
 
     /** Listener for the 'kernel.request' event. */

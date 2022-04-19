@@ -15,14 +15,11 @@ final class CanonicalUrlGenerator
 {
     private RouterInterface $router;
     private string $siteUrl;
-    private bool $trailingSlash;
 
-    public function __construct(RouterInterface $router, array $config = [])
+    public function __construct(RouterInterface $router, string $siteUrl)
     {
         $this->router = $router;
-
-        $this->siteUrl = $config['site_url'];
-        $this->trailingSlash = (bool) $config['trailing_slash'];
+        $this->siteUrl = $siteUrl;
     }
 
     /**

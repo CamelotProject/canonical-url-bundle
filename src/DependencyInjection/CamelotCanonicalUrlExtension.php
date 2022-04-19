@@ -24,5 +24,20 @@ final class CamelotCanonicalUrlExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('camelot_canonical_url.config', $config);
+
+        $container->getDefinition(CanonicalUrlGenerator::class)
+            ->setArgument('$siteUrl', $config['site_url'])
+        ;
+
+        $container->getDefinition(RequestListener::class)
+            ->setArgument('$redirect', $config['redirect'])
+            ->setArgument('$redirectCode', $config['redirect_code'])
+        ;
+
+        $container->getDefinition(ExceptionListener::class)
+            ->setArgument('$redirect', $config['redirect'])
+            ->setArgument('$redirectCode', $config['redirect_code'])
+            ->setArgument('$trailingSlash', $config['trailing_slash'])
+        ;
     }
 }

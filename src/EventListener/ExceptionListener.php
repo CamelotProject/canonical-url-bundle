@@ -20,12 +20,12 @@ final class ExceptionListener
     private int $redirectCode;
     private bool $trailingSlash;
 
-    public function __construct(RouterInterface $router, array $config = [])
+    public function __construct(RouterInterface $router, bool $redirect, int $redirectCode, bool $trailingSlash)
     {
         $this->router = $router;
-        $this->redirect = (bool) $config['redirect'];
-        $this->redirectCode = (int) $config['redirect_code'];
-        $this->trailingSlash = (bool) $config['trailing_slash'];
+        $this->redirect = $redirect;
+        $this->redirectCode = $redirectCode;
+        $this->trailingSlash = $trailingSlash;
     }
 
     /** Listener for the 'kernel.exception' event. */
