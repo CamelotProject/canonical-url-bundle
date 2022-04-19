@@ -40,6 +40,10 @@ final class CanonicalLinkExtension extends AbstractExtension
         $route = $route ?? $request->attributes->get('_route');
         $parameters = $parameters ?? $request->attributes->get('_route_params', []);
 
+        if (!$route) {
+            return '';
+        }
+
         return $this->urlGenerator->generate($route, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
     }
 }
