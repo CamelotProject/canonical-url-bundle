@@ -28,9 +28,7 @@ final class ExceptionListener
         $this->trailingSlash = (bool) $config['trailing_slash'];
     }
 
-    /**
-     * Listener for the 'kernel.exception' event.
-     */
+    /** Listener for the 'kernel.exception' event. */
     public function onKernelException(ExceptionEvent $event): bool
     {
         if (!$event->getThrowable() instanceof NotFoundHttpException) {
@@ -59,9 +57,7 @@ final class ExceptionListener
         return true;
     }
 
-    /**
-     * See if there's a matching route without a trailing slash.
-     */
+    /** See if there's a matching route without a trailing slash. */
     private function getAlternativeRoute(string $uri): ?array
     {
         $alternativeUri = rtrim($uri, '/');

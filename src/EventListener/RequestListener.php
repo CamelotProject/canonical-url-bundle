@@ -14,9 +14,7 @@ final class RequestListener
     private bool $redirect;
     private int $redirectCode;
 
-    /**
-     * KernelEventListener constructor.
-     */
+    /** KernelEventListener constructor. */
     public function __construct(CanonicalUrlGenerator $urlGenerator, array $config = [])
     {
         $this->canonicalUrlGenerator = $urlGenerator;
@@ -27,9 +25,7 @@ final class RequestListener
         $this->redirectCode = (int) $config['redirect_code'];
     }
 
-    /**
-     * Listener for the 'kernel.request' event.
-     */
+    /** Listener for the 'kernel.request' event. */
     public function onKernelRequest(RequestEvent $event): bool
     {
         $request = $event->getRequest();

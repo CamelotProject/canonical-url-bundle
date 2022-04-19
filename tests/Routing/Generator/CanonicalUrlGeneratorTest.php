@@ -2,41 +2,39 @@
 
 declare(strict_types=1);
 
-namespace Camelot\CanonicalUrlBundle\Tests\Service;
+namespace Camelot\CanonicalUrlBundle\Tests\Routing\Generator;
 
 use Camelot\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator;
 use Camelot\CanonicalUrlBundle\Tests\AbstractTest;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
-class CanonicalUrlGeneratorTest extends AbstractTest
+/**
+ * @internal
+ * @covers \Camelot\CanonicalUrlBundle\Routing\Generator\CanonicalUrlGenerator
+ */
+final class CanonicalUrlGeneratorTest extends AbstractTest
 {
-    /**
-     * @dataProvider configProvider
-     */
+    /** @dataProvider configProvider */
     public function testGenerateUrl(array $config): void
     {
         $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
 
         $url = $urlGenerator->generate('foo');
 
-        static::assertEquals('https://example.org/foo', $url);
+        static::assertSame('https://example.org/foo', $url);
     }
 
-    /**
-     * @dataProvider configProvider
-     */
+    /** @dataProvider configProvider */
     public function testGenerateUrlWithStringParams(array $config): void
     {
         $urlGenerator = new CanonicalUrlGenerator($this->getRouter(), $config);
 
         $url = $urlGenerator->generate('foo', 'key1=val1&key2=val2');
 
-        static::assertEquals('https://example.org/foo?key1=val1&key2=val2', $url);
+        static::assertSame('https://example.org/foo?key1=val1&key2=val2', $url);
     }
 
-    /**
-     * @dataProvider configProvider
-     */
+    /** @dataProvider configProvider */
     public function testNonExistentRouteThrowsException(array $config): void
     {
         $this->expectException(RouteNotFoundException::class);
@@ -46,9 +44,7 @@ class CanonicalUrlGeneratorTest extends AbstractTest
         $urlGenerator->generate('bar');
     }
 
-    /**
-     * @dataProvider configProvider
-     */
+    /** @dataProvider configProvider */
     public function testEmptyRouteThrowsException(array $config): void
     {
         $this->expectException(RouteNotFoundException::class);

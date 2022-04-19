@@ -12,11 +12,13 @@ use Camelot\CanonicalUrlBundle\Tests\AbstractTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
-class CompilerPassTest extends AbstractTest
+/**
+ * @internal
+ * @coversNothing
+ */
+final class CompilerPassTest extends AbstractTest
 {
-    /**
-     * @dataProvider configProvider
-     */
+    /** @dataProvider configProvider */
     public function testAddConfigArgumentToServiceDefinitions(array $config): void
     {
         $container = new ContainerBuilder();

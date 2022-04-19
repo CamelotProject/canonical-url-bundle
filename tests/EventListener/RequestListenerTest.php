@@ -14,11 +14,13 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class RequestListenerTest extends AbstractTest
+/**
+ * @internal
+ * @covers \Camelot\CanonicalUrlBundle\EventListener\RequestListener
+ */
+final class RequestListenerTest extends AbstractTest
 {
-    /**
-     * @dataProvider configProvider
-     */
+    /** @dataProvider configProvider */
     public function testCanonicalRedirect(array $config): void
     {
         $request = $this->getFooRequest(false);
@@ -34,9 +36,7 @@ class RequestListenerTest extends AbstractTest
         static::assertInstanceOf(RedirectResponse::class, $event->getResponse());
     }
 
-    /**
-     * @dataProvider configProvider
-     */
+    /** @dataProvider configProvider */
     public function testNoRedirectWhenUrlIsCanonical(array $config): void
     {
         $request = $this->getFooRequest(true, false);
@@ -51,9 +51,7 @@ class RequestListenerTest extends AbstractTest
         static::assertSame($response, $event->getResponse());
     }
 
-    /**
-     * @dataProvider configProvider
-     */
+    /** @dataProvider configProvider */
     public function testKernelRequestListenerDoesNothingWithEmptyRoute(array $config): void
     {
         $event = $this->getRequestEvent(new Request());
@@ -67,13 +65,11 @@ class RequestListenerTest extends AbstractTest
 
     protected function getRequestEvent(Request $request): RequestEvent
     {
-        $event = new RequestEvent(
-            $this-> createMock(HttpKernel::class),
+        return new RequestEvent(
+            $this->createMock(HttpKernel::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
-
-        return $event;
     }
 
     protected function getListener(array $config): RequestListener
@@ -81,8 +77,7 @@ class RequestListenerTest extends AbstractTest
         $router = $this->getRouter();
 
         $urlGenerator = new CanonicalUrlGenerator($router, $config);
-        $listener = new RequestListener($urlGenerator, $config);
 
-        return $listener;
+        return new RequestListener($urlGenerator, $config);
     }
 }

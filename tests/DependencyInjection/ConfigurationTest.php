@@ -9,7 +9,11 @@ use Camelot\CanonicalUrlBundle\Tests\AbstractTest;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 
-class ConfigurationTest extends AbstractTest
+/**
+ * @internal
+ * @covers \Camelot\CanonicalUrlBundle\DependencyInjection\Configuration
+ */
+final class ConfigurationTest extends AbstractTest
 {
     /**
      * Some basic tests to make sure the configuration is correctly processed in
@@ -60,9 +64,7 @@ class ConfigurationTest extends AbstractTest
         $this->process($configs);
     }
 
-    /**
-     * Processes an array of configurations and returns a compiled version.
-     */
+    /** Processes an array of configurations and returns a compiled version. */
     protected function process(array $configs): array
     {
         $processor = new Processor();

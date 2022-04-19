@@ -36,7 +36,7 @@ abstract class AbstractTest extends TestCase
 
         $loader = $this->createMock(LoaderInterface::class);
         $loader
-            ->expects($this->any())
+            ->expects(static::any())
             ->method('load')
             ->willReturn($routeCollection)
         ;
@@ -64,7 +64,7 @@ abstract class AbstractTest extends TestCase
     protected function getMockRequest(string $path, bool $secure = true, bool $trailingSlash = true): Request
     {
         $scheme = ($secure) ? 'https' : 'http';
-        $uri = "$scheme://example.org/$path";
+        $uri = "{$scheme}://example.org/{$path}";
 
         if ($trailingSlash) {
             $uri .= '/';

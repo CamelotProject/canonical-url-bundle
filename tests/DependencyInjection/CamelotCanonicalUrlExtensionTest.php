@@ -8,11 +8,13 @@ use Camelot\CanonicalUrlBundle\DependencyInjection\CamelotCanonicalUrlExtension;
 use Camelot\CanonicalUrlBundle\Tests\AbstractTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class CamelotCanonicalUrlExtensionTest extends AbstractTest
+/**
+ * @internal
+ * @covers \Camelot\CanonicalUrlBundle\DependencyInjection\CamelotCanonicalUrlExtension
+ */
+final class CamelotCanonicalUrlExtensionTest extends AbstractTest
 {
-    /**
-     * @dataProvider configProvider
-     */
+    /** @dataProvider configProvider */
     public function testSetConfigurationParameter(array $config): void
     {
         $container = new ContainerBuilder();
@@ -28,6 +30,6 @@ class CamelotCanonicalUrlExtensionTest extends AbstractTest
     {
         $extension = new CamelotCanonicalUrlExtension();
 
-        static::assertEquals('camelot_canonical_url', $extension->getAlias());
+        static::assertSame('camelot_canonical_url', $extension->getAlias());
     }
 }

@@ -7,6 +7,9 @@ namespace Camelot\CanonicalUrlBundle\Routing\Generator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use function is_string;
+use function ltrim;
+use function parse_str;
+use function rtrim;
 
 final class CanonicalUrlGenerator
 {
@@ -26,27 +29,22 @@ final class CanonicalUrlGenerator
      * Returns the canonical URL for a route.
      *
      * @param string       $route  Route to generate a URL for
-     * @param string|array $params parameters in 'key1=val1&key2=val2' format or key/value array
+     * @param array|string $params parameters in 'key1=val1&key2=val2' format or key/value array
      */
-    public function generate(string $route, $params = []): string
+    public function generate(string $route, null|string|array $params = []): string
     {
         $params = $this->getParameters($params);
         $uri = $this->router->generate($route, $params, UrlGeneratorInterface::ABSOLUTE_PATH);
-        $url = rtrim($this->siteUrl, '/') . '/' . ltrim($uri, '/');
 
-        return $url;
+        return rtrim($this->siteUrl, '/') . '/' . ltrim($uri, '/');
     }
 
-    /**
-     * @param string|array $parameters
-     */
-    protected function getParameters($parameters = []): array
+    private function getParameters(null|string|array $parameters): array
     {
-        $parameters = $parameters ?: [];
         if (is_string($parameters)) {
             parse_str($parameters, $parameters);
         }
 
-        return $parameters;
+        return (array) $parameters;
     }
 }

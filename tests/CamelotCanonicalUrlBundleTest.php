@@ -10,16 +10,17 @@ use Camelot\CanonicalUrlBundle\DependencyInjection\Compiler\CompilerPass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class CamelotCanonicalUrlBundleTest extends TestCase
+/**
+ * @internal
+ * @covers \Camelot\CanonicalUrlBundle\DependencyInjection\CamelotCanonicalUrlExtension
+ */
+final class CamelotCanonicalUrlBundleTest extends TestCase
 {
     public function testGetContainerExtension(): void
     {
         $bundle = new CamelotCanonicalUrlBundle();
 
-        static::assertInstanceOf(
-            CamelotCanonicalUrlExtension::class,
-            $bundle->getContainerExtension()
-        );
+        static::assertInstanceOf(CamelotCanonicalUrlExtension::class, $bundle->getContainerExtension());
     }
 
     public function testCompilerPass(): void
@@ -36,6 +37,7 @@ class CamelotCanonicalUrlBundleTest extends TestCase
         foreach ($passes as $pass) {
             if ($pass instanceof CompilerPass) {
                 $found = true;
+
                 break;
             }
         }
